@@ -37,6 +37,12 @@ passport.use(new LocalStrategy(User.authenticate())); // use the local strategy.
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
+//to get access to the user we can use req.user: req.user property will be set to the authenticated user when login
+//using this middleware because I want the user to be avaliable in my templates
+app.use((req, res, next) => {
+    res.locals.signedInUser = req.user;
+    next();
+})
 
 app.use("/", userRoutes) // all routes for register, login, logout ... 
 
@@ -45,6 +51,7 @@ app.get("/", (req, res) => { //landingpage
 })
 //protect chat route: need to be logged in to go here. Can check this with the passport-method isAuthenticated
 app.get("/chat", (req, res) => {
+    console.log("current user:" + req.user)
     if (!req.isAuthenticated()) {
         console.log("You need to be logged in!")
         return res.redirect("/login")
