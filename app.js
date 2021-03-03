@@ -43,9 +43,14 @@ app.use("/", userRoutes) // all routes for register, login, logout ...
 app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
 })
-
+//protect chat route: need to be logged in to go here. Can check this with the passport-method isAuthenticated
 app.get("/chat", (req, res) => {
-    res.render("chat")
+    if (!req.isAuthenticated()) {
+        console.log("You need to be logged in!")
+        return res.redirect("/login")
+    } else {
+        res.render("chat")
+    }
 })
 
 app.listen(3000, () => {
