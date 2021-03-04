@@ -11,12 +11,6 @@ router.get("/register", (req, res) => {
     res.render("register")
 })
 
-// passport has middleware passport.authenticate() (it compares the hashed passwords for us)
-//to get access to the user later on we can use req.user: req.user property will be set to the authenticated user when login
-router.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
-    res.redirect("/")
-})
-
 router.post("/register", async (req, res, next) => {
     try {
         const { email, username, password } = req.body;
@@ -34,7 +28,14 @@ router.post("/register", async (req, res, next) => {
         res.redirect("/register")
     }
 })
-//witch passport there is a logout method added to the request object
+
+// passport has middleware passport.authenticate() (it compares the hashed passwords for us)
+//to get access to the user later on we can use req.user: req.user property will be set to the authenticated user when login
+router.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => {
+    res.redirect("/")
+})
+
+//with passport there is a logout method added to the request object
 router.get("/logout", (req, res) => {
     req.logOut()
     console.log("Logged out")

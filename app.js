@@ -1,11 +1,19 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const userRoutes = require("./routes/users");
+const chatRoutes = require("./routes/chat")
 const User = require("./models/user")
+
+const app = express();
+
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
+app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
 mongoose.connect('mongodb://localhost:27017/chatApp', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => {
@@ -16,8 +24,7 @@ mongoose.connect('mongodb://localhost:27017/chatApp', { useNewUrlParser: true, u
         console.log(err)
     })
 
-const app = express();
-
+app.engine("ejs", ejsMate)
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -45,19 +52,10 @@ app.use((req, res, next) => {
 })
 
 app.use("/", userRoutes) // all routes for register, login, logout ... 
+app.use("/chat", chatRoutes) // chat page and chat root routes.. 
 
 app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
-})
-//protect chat route: need to be logged in to go here. Can check this with the passport-method isAuthenticated
-app.get("/chat", (req, res) => {
-    console.log("current user:" + req.user)
-    if (!req.isAuthenticated()) {
-        console.log("You need to be logged in!")
-        return res.redirect("/login")
-    } else {
-        res.render("chat")
-    }
 })
 
 app.listen(3000, () => {
