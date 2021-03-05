@@ -1,0 +1,30 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <h1>Chatroom - <%= room %> </h1>
+    </div>
+</div>
+<div class="row flex-grow-1">
+
+    <!-- chat window -->
+    <div class="col-md-8 col-sm-8 border p-2 d-flex flex-column">
+        <div id="messages-container" class="border flex-grow-1">
+            <ul id="messages">
+
+            </ul>
+        </div>
+
+        <form id="chat-form" class="d-flex mt-auto">
+            <input id="chat-input" type="text" placeholder="enter a message" class="flex-grow-1">
+            <input id="send-btn" type="submit" value="Send" class="btn btn-large border ml-auto">
+        </form>
+    </div>
+
+    <!-- show current users in chat here -->
+    <div class="col-md-4 col-sm-4 border p-2">
+        users:
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/public/scripts/chatroom.js"></script>

@@ -12,4 +12,20 @@ router.get("/", (req, res) => {
     }
 })
 
+router.get("/:id", (req, res) => {
+    const { id } = req.params;
+    if (!req.isAuthenticated()) {
+        console.log("You need to be logged in!")
+        return res.redirect("/login")
+    } else {
+        res.render("chatroom", { room: id })
+    }
+})
+
+router.post("/room", (req, res) => {
+    console.log(req.body)
+    const { room } = req.body;
+    res.redirect(`/chat/${room}`)
+})
+
 module.exports = router

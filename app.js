@@ -5,12 +5,17 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+
 const userRoutes = require("./routes/users");
 const chatRoutes = require("./routes/chat")
 const User = require("./models/user")
 
 const app = express();
+const http = require("http").Server(app)
+const io = require("socket.io")(http)
 
+
+app.use("/public", express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
@@ -58,6 +63,24 @@ app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
 })
 
-app.listen(3000, () => {
+io.on("connection", (socket) => {
+    console.log(socket)
+    console.log("user connected")
+
+    //listening to incoming messages
+    socket.on("chat message", message => { //arg1: det eventet vi vill lyssna på, arg2: det vi kallar det värdet som vi tar in (chatInput.value)
+        console.log("recieved message " + message + " , on server")
+        //and broadcast this message to all clients (all connected sockets)
+        console.log("broadcasting the message " + message + " to all clients")
+        io.emit("chat message", message) // arg1: vad vi vill kalla det, arg2: meddelandet
+    })
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected")
+    })
+})
+
+
+http.listen(3000, () => {
     console.log("listening on 3000")
 })
