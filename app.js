@@ -64,15 +64,20 @@ app.get("/", (req, res) => { //landingpage
 })
 
 io.on("connection", (socket) => {
-    console.log(socket)
-    console.log("user connected")
+    // console.log(socket)
+    console.log("user connected to room ")
+
+    socket.on("join room", (data) => {
+        console.log("user joined the room: " + data.roomname)
+        socket.join(data.roomname)
+    })
 
     //listening to incoming messages
-    socket.on("chat message", message => { //arg1: det eventet vi vill lyssna på, arg2: det vi kallar det värdet som vi tar in (chatInput.value)
-        console.log("recieved message " + message + " , on server")
-        //and broadcast this message to all clients (all connected sockets)
-        console.log("broadcasting the message " + message + " to all clients")
-        io.emit("chat message", message) // arg1: vad vi vill kalla det, arg2: meddelandet
+    socket.on("chat message", data => { //arg1: det eventet vi vill lyssna på, arg2: det vi kallar det värdet som vi tar in (objekt)
+        console.log("recieved message " + data.message + " , on server")
+        //and broadcast this message to all clients (all connected sockets) in that room 
+        console.log("broadcasting the message " + data.message + " to all clients")
+        io.to(data.roomname).emit("chat message", data.message) // arg1: vad vi vill kalla det, arg2: meddelandet
     })
 
     socket.on("disconnect", () => {
