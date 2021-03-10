@@ -2,10 +2,8 @@
 <h1>Chat</h1>
 <h2>Choose a chat room or set up a new</h2>
 
-<form method="post" action="/chat/room">
-    <select name="room" id="option">
-        <option value="general">General</option>
-        <option value="front-end">Front-end</option>
-    </select>
-    <button>Go to room</button>
-</form>
+<!-- links to all chatrooms -->
+<% for(let i = 0; i < rooms.length; i++) {  %>
+<a href="/chat/<%=rooms[i]._id%>"> <%= rooms[i].name %> </a>
+
+<% } %>

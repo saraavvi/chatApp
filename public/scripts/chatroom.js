@@ -6,27 +6,21 @@ let messages = document.getElementById("messages")
 let messagesContainer = document.getElementById("messages-container")
 let room = document.getElementById("room_name")
 
-//get the room name from the url 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const roomname = urlParams.get('room');
-
-room.innerText = roomname;
+// get room id from url 
+let url_array = document.location.href.split('/')
+let id = url_array[url_array.length - 1];
 
 socket.emit("join room", {
-    roomname: roomname
+    id: id
 })
 
 chatForm.addEventListener("submit", (event) => {
     event.preventDefault()
-
     //send message to server
     if (chatInput.value) {
         let message = chatInput.value
-        console.log("sending chat message " + chatInput.value + " to the server")
         socket.emit("chat message", {
-            message: message,// arg1: vad vi vill att eventet ska heta, arg2: vad vi vill skcika med, (ett objekt)
-            roomname: roomname
+            message: message
         })
     }
     chatInput.value = "";

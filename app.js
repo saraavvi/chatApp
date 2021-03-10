@@ -9,6 +9,7 @@ const LocalStrategy = require("passport-local");
 const userRoutes = require("./routes/users");
 const chatRoutes = require("./routes/chat")
 const User = require("./models/user")
+const Room = require("./models/room")
 
 const app = express();
 const http = require("http").Server(app)
@@ -64,20 +65,16 @@ app.get("/", (req, res) => { //landingpage
 })
 
 io.on("connection", (socket) => {
-    // console.log(socket)
-    console.log("user connected to room ")
 
-    socket.on("join room", (data) => {
-        console.log("user joined the room: " + data.roomname)
-        socket.join(data.roomname)
-    })
+    socket.on("join room", async (data) => {
+        const room = await Room.findById(data.id)
+        const roomname = room.name
+        socket.join(roomname)
 
-    //listening to incoming messages
-    socket.on("chat message", data => { //arg1: det eventet vi vill lyssna på, arg2: det vi kallar det värdet som vi tar in (objekt)
-        console.log("recieved message " + data.message + " , on server")
-        //and broadcast this message to all clients (all connected sockets) in that room 
-        console.log("broadcasting the message " + data.message + " to all clients")
-        io.to(data.roomname).emit("chat message", data.message) // arg1: vad vi vill kalla det, arg2: meddelandet
+        //listening to incoming messages, and boadcast
+        socket.on("chat message", data => {
+            io.to(roomname).emit("chat message", data.message)
+        })
     })
 
     socket.on("disconnect", () => {
