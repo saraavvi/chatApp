@@ -3,29 +3,28 @@ const router = express.Router();
 const Room = require("../models/room")
 
 //protect chat route: need to be logged in to go here. Can check this with the passport-method isAuthenticated
-router.get("/", async (req, res) => {
+const isLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        console.log("You need to be logged in!")
+        req.flash("error", "You need to be logged in")
+        return res.redirect("/login")
+    }
+    next()
+}
+
+router.get("/", isLoggedIn, async (req, res) => {
     console.log("current user:" + req.user)
     const rooms = await Room.find({})
     console.log(rooms)
+    res.render("chat", { rooms })
 
-    if (!req.isAuthenticated()) {
-        console.log("You need to be logged in!")
-        return res.redirect("/login")
-    } else {
-        res.render("chat", { rooms })
-    }
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const roomname = await Room.findById(id);
     const user = req.user;
-    if (!req.isAuthenticated()) {
-        console.log("You need to be logged in!")
-        return res.redirect("/login")
-    } else {
-        res.render("chatroom", { id, user, roomname })
-    }
+    res.render("chatroom", { id, user, roomname })
 })
 
 

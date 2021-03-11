@@ -5,16 +5,14 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-
+const flash = require("connect-flash")
 const userRoutes = require("./routes/users");
 const chatRoutes = require("./routes/chat")
 const User = require("./models/user")
 const Room = require("./models/room")
-
 const app = express();
 const http = require("http").Server(app)
 const io = require("socket.io")(http)
-
 
 app.use("/public", express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
@@ -35,6 +33,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true }))
+app.use(flash())
 
 const sessionConfig = { // hur fixar man expiration för kakan?
     secret: "secret",
@@ -51,8 +50,10 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 //to get access to the user we can use req.user: req.user property will be set to the authenticated user when login
-//using this middleware because I want the user to be avaliable in my templates
+//using this middleware because I want the user and flash-message to be avaliable in my templates
 app.use((req, res, next) => {
+    res.locals.success = req.flash("success")
+    res.locals.error = req.flash("error")
     res.locals.signedInUser = req.user;
     next();
 })
@@ -74,6 +75,8 @@ io.on("connection", (socket) => {
         //listening to incoming messages, and boadcast
         socket.on("chat message", data => {
             io.to(roomname).emit("chat message", data.message)
+
+            //save message to database here
         })
     })
 
