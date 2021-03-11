@@ -4,14 +4,20 @@ let chatForm = document.getElementById("chat-form")
 let chatInput = document.getElementById("chat-input")
 let messages = document.getElementById("messages")
 let messagesContainer = document.getElementById("messages-container")
-let room = document.getElementById("room_name")
+// let room = document.getElementsByTagName("h1")
+// let roomname = room[0].childNodes[0].textContent;
+
+// console.log(roomname)
+
+let username = document.getElementById("this_user").innerText;
 
 // get room id from url 
 let url_array = document.location.href.split('/')
 let id = url_array[url_array.length - 1];
 
 socket.emit("join room", {
-    id: id
+    id: id,
+    username: username
 })
 
 chatForm.addEventListener("submit", (event) => {

@@ -23,7 +23,9 @@
 
     <!-- show current users in chat here -->
     <div class="col-md-4 col-sm-4 border p-2">
-        users:
+        <div>logged in as:</div>
+        <div id="this_user"> <%= signedInUser.username %> </div>
+        <div> users: </div>
     </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>

@@ -7,10 +7,14 @@ socket.io
 
 ejs and ejs-mate
 
+bootstrap
+
 express 
 
-mongoose
+mongoose and mongodb
+storing users, chatrooms and messages
 
-bootstrap
+flash
+Displaying error and success messages to the user
 
 

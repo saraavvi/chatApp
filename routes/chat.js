@@ -26,6 +26,13 @@ router.get("/:id", isLoggedIn, async (req, res) => {
     const user = req.user;
     res.render("chatroom", { id, user, roomname })
 })
+//endpoint for adding a room
+router.post("/", async (req, res) => {
+    const { name } = req.body;
+    const newRoom = await new Room({ name: name })
+    newRoom.save()
+    res.end("room was added")
+})
 
 
 
