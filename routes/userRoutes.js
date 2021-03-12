@@ -42,5 +42,11 @@ router.get("/logout", (req, res) => {
     res.redirect("/")
 })
 
+//endpoint to fetch all users
+router.get("/users", async (req, res) => {
+    const allUsers = await User.find({})
+    res.send(allUsers)
+})
+
 module.exports = router;
 

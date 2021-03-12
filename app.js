@@ -6,8 +6,8 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const flash = require("connect-flash")
-const userRoutes = require("./routes/users");
-const chatRoutes = require("./routes/chat")
+const userRoutes = require("./routes/userRoutes");
+const chatRoutes = require("./routes/chatRoutes")
 const User = require("./models/user")
 const Room = require("./models/room")
 const Message = require("./models/message")
@@ -19,10 +19,6 @@ app.use("/public", express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
-
-// const newroom = new Room({ name: "General" })
-// newroom.save()
-
 
 mongoose.connect('mongodb://localhost:27017/chatApp', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => {
@@ -57,7 +53,6 @@ passport.deserializeUser(User.deserializeUser())
 
 //to get access to the user we can use req.user: req.user property will be set to the authenticated user when login
 //using this middleware because I want the user and flash-message to be avaliable in my templates
-
 app.use((req, res, next) => {
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
@@ -71,7 +66,7 @@ app.use("/chat", chatRoutes) // chat page and chat root routes..
 app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
 })
-
+//move sockets to a separate file later..?
 io.on("connection", (socket) => {
 
     socket.on("join room", async (data) => {
@@ -80,6 +75,7 @@ io.on("connection", (socket) => {
         const roomname = room.name
         const username = data.username;
         socket.join(roomname)
+
 
         //listening to incoming messages, and boadcast
         socket.on("chat message", async data => {
@@ -91,13 +87,7 @@ io.on("connection", (socket) => {
             //save message to message collection:
             const newMsg = new Message({ chatmessage: chatmessage, sender: sender })
             newMsg.save()
-            console.log("roomid:" + roomid)
 
-            //detta meddelandets id:
-            console.log("new message id: " + newMsg._id)
-
-            // const ettrum = await Room.findById(roomid)
-            // console.log(ettrum)
             //push this message to the array in room collection..
             Room.findByIdAndUpdate(roomid, { $push: { messages: newMsg._id } }, { useFindAndModify: false }, function (err, result) {
                 if (err) {

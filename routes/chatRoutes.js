@@ -12,6 +12,7 @@ const isLoggedIn = (req, res, next) => {
     next()
 }
 
+// show all rooms
 router.get("/", isLoggedIn, async (req, res) => {
     console.log("current user:" + req.user)
     const rooms = await Room.find({})
@@ -20,14 +21,16 @@ router.get("/", isLoggedIn, async (req, res) => {
 
 })
 
+//to a specific room
 router.get("/:id", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const roomname = await Room.findById(id);
     const user = req.user;
     res.render("chatroom", { id, user, roomname })
 })
-//endpoint for adding a room
-router.post("/", async (req, res) => {
+
+//endpoint for adding a new room
+router.post("/", isLoggedIn, async (req, res) => {
     const { name } = req.body;
     const newRoom = await new Room({ name: name })
     newRoom.save()

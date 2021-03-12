@@ -1,18 +1,30 @@
 <% layout("layouts/boilerplate") %>
-<h1>Chat</h1>
-<h2>Choose a chat room or set up a new</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Channels</h2>
+        <!-- links to all chatrooms -->
+        <!-- link to chat/:name instead: " chat/rooms[i].name "  ??-->
+        <% for(let i = 0; i < rooms.length; i++) {  %>
+        <div><a href="/chat/<%=rooms[i]._id%>"> <%= rooms[i].name %> </a></div>
 
-<!-- links to all chatrooms -->
-<% for(let i = 0; i < rooms.length; i++) {  %>
-<a href="/chat/<%=rooms[i]._id%>"> <%= rooms[i].name %> </a>
+        <% } %>
+        <!-- set up a new room -->
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            +
+        </button>
+    </div>
+    <div class="col-md-6">
+        <h2>All members</h2>
+        <div id="users">
 
-<% } %>
+        </div>
 
-<!-- set up a new room -->
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    +
-</button>
+    </div>
+</div>
+
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
