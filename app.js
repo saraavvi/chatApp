@@ -79,7 +79,8 @@ io.on("connection", (socket) => {
 
         //listening to incoming messages, and boadcast
         socket.on("chat message", async data => {
-            io.to(roomname).emit("chat message", data.message)
+            const msgData = { msg: data.message, sender: username }
+            io.to(roomname).emit("chat message", msgData)
             const chatmessage = data.message;
             const user = await User.findOne({ username: username }).exec()
             const sender = user._id;

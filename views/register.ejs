@@ -1,8 +1,15 @@
 <% layout("layouts/boilerplate") %>
-<h1>Register</h1>
-<form action="/register" method="POST" novalidate>
-    <input type="text" name="username" required placeholder="username">
-    <input type="email" name="email" required placeholder="email">
-    <input type="password" name="password" required placeholder="password">
-    <input type="submit" value="register">
-</form>
+<div class="row d-flex justify-content-center m-auto">
+    <div class="col-md-12">
+        <div id="form-container">
+            <h1>Register</h1>
+
+            <form id="signin-register-form" action="/register" method="POST" novalidate>
+                <input type="text" name="username" required placeholder="username">
+                <input type="email" name="email" required placeholder="email">
+                <input type="password" name="password" required placeholder="password">
+                <input type="submit" value="register">
+            </form>
+        </div>
+    </div>
+</div>

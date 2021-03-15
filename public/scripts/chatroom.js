@@ -3,7 +3,7 @@ var socket = io();
 let chatForm = document.getElementById("chat-form")
 let chatInput = document.getElementById("chat-input")
 let messages = document.getElementById("messages")
-let messagesContainer = document.getElementById("messages-container")
+
 
 let username = document.getElementById("this_user").innerText;
 
@@ -30,12 +30,17 @@ chatForm.addEventListener("submit", (event) => {
 
 
 //recieve broadcasted messages from server:
-socket.on("chat message", data => { // arg1: what the event is called on the server, arg2: the message
-    console.log("recieved the broadcasted message " + data)
+socket.on("chat message", msgData => { // arg1: what the event is called on the server, arg2: the message
+    console.log("recieved the broadcasted message " + msgData.msg)
     let newMessage = document.createElement("li")
-    newMessage.innerText = data;
+    let chatMessage = document.createElement("div")
+    let sender = document.createElement("b")
+    chatMessage.innerText = msgData.msg;
+    sender.innerText = msgData.sender;
+    newMessage.append(sender);
+    newMessage.append(chatMessage);
     messages.append(newMessage);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
 
 })
 

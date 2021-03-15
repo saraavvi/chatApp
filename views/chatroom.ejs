@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <h1> <%= roomname.name %> </h1>
+        <h1> <%= currentRoom.name %> </h1>
     </div>
 </div>
 <div class="row flex-grow-1">
@@ -10,7 +10,14 @@
     <!-- chat window -->
     <div class="col-md-8 col-sm-8 border p-2 d-flex flex-column">
         <div id="messages-container" class="border flex-grow-1">
+
+
             <ul id="messages">
+                <% for(let item of messageList) { %>
+                <li> <b> <%= item.sender.username %> </b>
+                    <div> <%= item.chatmessage %> </div>
+                </li>
+                <% } %>
 
             </ul>
         </div>

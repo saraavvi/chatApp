@@ -1,0 +1,23 @@
+/* styling for navigation  */
+.navbar {
+    background: rgb(255, 255, 255);
+    border-bottom: 1px solid grey;    
+}
+.navbar-collapse {
+    text-align: center;
+}
+/* styling for login och register form */
+#form-container {
+    border: 1px solid grey;
+    padding: 2rem;
+}
+
+/* styling for landing page  */
+#landing-page-message {
+    text-align: center;
+}
+
+/* styling for footer  */
+footer {
+    text-align: center;
+}
