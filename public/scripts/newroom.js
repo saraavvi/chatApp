@@ -19,14 +19,14 @@ addRoomBtn.addEventListener("click", (e) => {
         })
 })
 
-// TODO: make all names "buttons" that triggers modal where you can se info about the user and set up a private chat. + go their profile page?
-// move this to another script
-fetch("/users")
-    .then(response => response.json())
-    .then(users => {
-        let usersContainer = document.getElementById("users")
-        for (let user of users) {
-            let userElement = `<div>${user.username}</div>`
-            usersContainer.innerHTML += userElement;
-        }
-    })
+// // TODO: make all names "buttons" that triggers modal where you can se info about the user and set up a private chat. + go their profile page?
+// // move this to another script
+// fetch("/users")
+//     .then(response => response.json())
+//     .then(users => {
+//         let usersContainer = document.getElementById("users")
+//         for (let user of users) {
+//             let userElement = `<div>${user.username}</div>`
+//             usersContainer.innerHTML += userElement;
+//         }
+//     })

@@ -1,0 +1,11 @@
+<% layout("layouts/boilerplate") %>
+<div>
+    <h1>Profile</h1>
+    <p> Username: <%= user.username %> </p>
+    <p> Email: <%= user.email %> </p>
+    <p>Upload profile picture:</p>
+    <form action="/profile/upload-picture" method="POST" enctype="multipart/form-data">
+        <input type="file" name="picture">
+        <input type="submit" value="Save">
+    </form>
+</div>

@@ -12,9 +12,10 @@ bootstrap
 express 
 
 mongoose and mongodb
-storing users, chatrooms and messages
 
 flash
-Displaying error and success messages to the user
+
+multer
+
 
 

@@ -8,6 +8,7 @@ const LocalStrategy = require("passport-local");
 const flash = require("connect-flash")
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes")
+const profileRoutes = require("./routes/profileRoutes")
 const User = require("./models/user")
 const Room = require("./models/room")
 const Message = require("./models/message")
@@ -15,6 +16,7 @@ const app = express();
 const http = require("http").Server(app)
 const io = require("socket.io")(http)
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 app.use("/public", express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
@@ -62,6 +64,7 @@ app.use((req, res, next) => {
 
 app.use("/", userRoutes) // all routes for register, login, logout ... 
 app.use("/chat", chatRoutes) // chat page and chat root routes.. 
+app.use("/profile", profileRoutes) // profile page and file upload
 
 app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
