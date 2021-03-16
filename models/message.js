@@ -7,6 +7,10 @@ const messageSchema = new Schema({
     },
     sender: {
         type: Schema.Types.ObjectId, ref: 'User'
+    },
+    created: {
+        type: Date,
+        default: Date.now
     }
 })
 

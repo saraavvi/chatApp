@@ -4,10 +4,12 @@
         <h2>Channels</h2>
         <!-- links to all chatrooms -->
         <!-- link to chat/:name instead: " chat/rooms[i].name "  ??-->
-        <% for(let i = 0; i < rooms.length; i++) {  %>
-        <div><a href="/chat/<%=rooms[i]._id%>"> <%= rooms[i].name %> </a></div>
+        <ul>
+            <% for(let i = 0; i < rooms.length; i++) {  %>
+            <li><a href="/chat/<%=rooms[i]._id%>"> <%= rooms[i].name %> </a></li>
 
-        <% } %>
+            <% } %>
+        </ul>
         <!-- set up a new room -->
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">

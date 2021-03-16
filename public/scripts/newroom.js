@@ -26,7 +26,6 @@ fetch("/users")
     .then(users => {
         let usersContainer = document.getElementById("users")
         for (let user of users) {
-            console.log(user)
             let userElement = `<div>${user.username}</div>`
             usersContainer.innerHTML += userElement;
         }

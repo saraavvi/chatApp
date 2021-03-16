@@ -14,7 +14,10 @@
 
             <ul id="messages">
                 <% for(let item of messageList) { %>
-                <li> <b> <%= item.sender.username %> </b>
+                <li class="message-item">
+                    <b> <%= item.sender.username %> </b>
+                    <span> <%= item.created.toLocaleDateString("en-US") %>,
+                        <%= item.created.toLocaleTimeString("en-US") %> </span>
                     <div> <%= item.chatmessage %> </div>
                 </li>
                 <% } %>

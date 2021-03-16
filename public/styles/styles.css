@@ -1,3 +1,10 @@
+/* general styling */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+
 /* styling for navigation  */
 .navbar {
     background: rgb(255, 255, 255);
@@ -17,6 +24,22 @@
     text-align: center;
 }
 
+/* styling for chatroom */
+#messages-container {
+    height: 100px;
+    max-height: 800px;
+    
+}
+
+#messages {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.message-item {
+    border: 1px solid grey;
+    padding: 5px;
+}
 /* styling for footer  */
 footer {
     text-align: center;
