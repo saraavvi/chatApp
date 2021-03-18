@@ -1,11 +1,50 @@
 <% layout("layouts/boilerplate") %>
 <div>
-    <h1>Profile</h1>
-    <p> Username: <%= user.username %> </p>
-    <p> Email: <%= user.email %> </p>
-    <p>Upload profile picture:</p>
+  <h1>Profile</h1>
+  <% if(user.profilePic){ %>
+  <div class="picture-container">
+    <img class="img-thumbnail" src="/<%=user.profilePic %>" />
+  </div>
+
+  <!-- <p>Change profile picture:</p>
     <form action="/profile/upload-picture" method="POST" enctype="multipart/form-data">
         <input type="file" name="picture">
         <input type="submit" value="Save">
-    </form>
+    </form> -->
+  <form action="/profile/delete-picture?_method=DELETE" method="POST">
+    <button>Delete picture</button>
+  </form>
+
+
+  <% } else {%>
+  <p>Upload profile picture:</p>
+  <form action="/profile/upload-picture" method="POST" enctype="multipart/form-data">
+    <input type="file" name="picture">
+    <input type="submit" value="Save">
+  </form>
+  <% } %>
+
+  <p> Username: <%= user.username %> </p>
+  <p> Email: <%= user.email %> </p>
+
 </div>
+
+<!-- 
+* När en bild laddas upp så sparas den i uploads folder och en referans till bilden 
+  sparas i databasen i user-dokumentet. 
+
+* Om det redan finns en bild - visa också bilden på profilsidan genom user.picture 
+  som innehåller path till bilden.
+
+* Man ska kunna ta bort bilden genom en knapp. 
+ (ta bort från upload folder och ta bort från databasen)
+
+* Försöker man ladda upp en bild när det redan finns en user.picture så ska 
+  den gamla raderas (i upload folder) och referensen i databasen ska 
+  skrivas över med den nya.  
+
+skapa endpoints för det här i profileRoutes.
+"/upload-picture" : lägger till bilden i databasen
+"/delete-picture" : tar raderar bilden från databasen
+"/update-picture" : updaterar referens till bilden med den nya
+-->

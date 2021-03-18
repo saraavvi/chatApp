@@ -17,6 +17,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    profilePic: {
+        type: String
     }
 })
 /* this will be added to the schema and: adds a username- and password-field*/

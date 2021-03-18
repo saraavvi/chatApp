@@ -1,6 +1,6 @@
 <% layout("layouts/boilerplate") %>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12 text-center">
         <h2>Channels</h2>
         <!-- links to all chatrooms -->
         <!-- link to chat/:name instead: " chat/rooms[i].name "  ??-->
@@ -13,16 +13,16 @@
         <!-- set up a new room -->
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#roomModal">
-            +
+            + Add channel
         </button>
     </div>
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
         <h2>All members</h2>
         <div id="users">
 
         </div>
 
-    </div>
+    </div> -->
 </div>
 
 
@@ -39,12 +39,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <label for new_room>Type the name of the room and click save</label>
+                <label for new_room>Type the name of the room and click create</label>
                 <input id="new_room" type="text" placeholder="Name of the room...">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="add_room" type="button" class="btn btn-primary">Save</button>
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                <button id="add_room" type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>

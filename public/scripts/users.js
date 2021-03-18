@@ -1,5 +1,5 @@
 // TODO: make all names "buttons" that triggers modal where you can se info about the user and set up a private chat. + go their profile page?
-
+/*
 fetch("/users")
     .then(response => response.json())
     .then(users => {
@@ -9,3 +9,4 @@ fetch("/users")
             usersContainer.innerHTML += userElement;
         }
     })
+    */

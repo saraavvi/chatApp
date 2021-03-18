@@ -27,8 +27,17 @@ ul {
 /* styling for chatroom */
 #messages-container {
     height: 100px;
-    max-height: 800px;
-    
+    max-height: 800px;   
+}
+.messagepic-container {
+    height: 40px;
+    width: 40px;
+}
+
+.picture {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
 }
 
 #messages {
@@ -39,7 +48,14 @@ ul {
 .message-item {
     border: 1px solid grey;
     padding: 5px;
+    display: flex;
 }
+
+/* styling for profile page */
+.picture-container {
+    width: 200px;
+}
+
 /* styling for footer  */
 footer {
     text-align: center;

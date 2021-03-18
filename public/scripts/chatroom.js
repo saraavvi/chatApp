@@ -35,17 +35,24 @@ socket.on("chat message", msgData => {
     console.log("recieved the broadcasted message " + msgData.msg)
     let newMessage = document.createElement("li")
     newMessage.classList.add("message-item")
+    let textContainer = document.createElement("div")
     let chatMessage = document.createElement("div")
     let sender = document.createElement("b")
     let time = ` ${new Date().toLocaleDateString("en-US")}, ${new Date().toLocaleTimeString("en-US")}`
-    console.log(time)
-
-    // time.innerText = new Date();
+    let pictureContainer = document.createElement("div")
+    let picture = document.createElement("img")
+    picture.classList.add("picture");
+    picture.src = `/${msgData.picture}`;
     chatMessage.innerText = msgData.msg;
     sender.innerText = msgData.sender;
-    newMessage.append(sender);
-    newMessage.append(time);
-    newMessage.append(chatMessage);
+    pictureContainer.append(picture);
+    pictureContainer.classList.add("messagepic-container")
+    newMessage.append(pictureContainer);
+    textContainer.append(sender);
+    textContainer.append(time);
+    textContainer.append(chatMessage);
+    newMessage.append(textContainer)
+
     messages.append(newMessage);
 
 

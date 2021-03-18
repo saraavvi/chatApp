@@ -13,14 +13,24 @@
 
 
             <ul id="messages">
+                <!-- there was a prob when tryng to render a chatroom that did not contain any previous messages.
+                should maybe fix this in a better way -->
+
                 <% for(let item of messageList) { %>
                 <li class="message-item">
-                    <b> <%= item.sender.username %> </b>
-                    <span> <%= item.created.toLocaleDateString("en-US") %>,
-                        <%= item.created.toLocaleTimeString("en-US") %> </span>
-                    <div> <%= item.chatmessage %> </div>
+                    <div class="messagepic-container">
+                        <img class="picture" src="/<%=item.sender.profilePic%>" />
+                    </div>
+                    <div>
+                        <b> <%= item.sender.username %> </b>
+                        <span> <%= item.created.toLocaleDateString("en-US") %>,
+                            <%= item.created.toLocaleTimeString("en-US") %> </span>
+                        <div> <%= item.chatmessage %> </div>
+                    </div>
                 </li>
                 <% } %>
+
+
 
             </ul>
         </div>

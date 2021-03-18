@@ -79,17 +79,20 @@ io.on("connection", (socket) => {
         const username = data.username;
         socket.join(roomname)
 
-
         //listening to incoming messages, and boadcast
         socket.on("chat message", async data => {
-            const msgData = { msg: data.message, sender: username }
-            io.to(roomname).emit("chat message", msgData)
-            const chatmessage = data.message;
             const user = await User.findOne({ username: username }).exec()
-            const sender = user._id;
+            const picture = user.profilePic;
+            console.log(picture)
+            const msgData = { msg: data.message, sender: username, picture: picture }
+
+            io.to(roomname).emit("chat message", msgData)
+
+            const chatmessage = data.message;
+            const senderId = user._id;
 
             //save message to message collection:
-            const newMsg = new Message({ chatmessage: chatmessage, sender: sender })
+            const newMsg = new Message({ chatmessage: chatmessage, sender: senderId })
             newMsg.save()
 
             //push this message to the array in room collection..
@@ -103,6 +106,7 @@ io.on("connection", (socket) => {
             })
         })
     })
+
 
     socket.on("disconnect", () => {
         console.log("user disconnected")

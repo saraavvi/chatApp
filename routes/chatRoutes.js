@@ -28,6 +28,7 @@ router.get("/:id", isLoggedIn, async (req, res) => {
         return Promise.all(oldMessages)
     })
         .then(messageList => {
+            console.log(messageList)
             res.render("chatroom", { id, user, currentRoom, messageList })
         })
 })
