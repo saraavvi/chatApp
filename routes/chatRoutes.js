@@ -36,9 +36,18 @@ router.get("/:id", isLoggedIn, async (req, res) => {
 //endpoint for adding a new room
 router.post("/", isLoggedIn, async (req, res) => {
     const { name } = req.body;
-    const newRoom = await new Room({ name: name })
+    const newRoom = await new Room({ name: name, creator: req.user._id })
     newRoom.save()
     res.end("room was added")
+})
+
+//endpoint for deleting a room 
+//todo: id a room is deleted, all the messages in that room should also be deleted
+router.delete("/:id", isLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    await Room.findByIdAndDelete(id)
+    res.end("room was deleted")
 })
 
 

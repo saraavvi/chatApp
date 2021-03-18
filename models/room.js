@@ -7,6 +7,9 @@ const roomSchema = new Schema({
         required: true,
         unique: true
     },
+    creator: {
+        type: Schema.Types.ObjectId, ref: 'User'
+    },
     messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
 })
 

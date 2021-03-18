@@ -14,13 +14,28 @@ addRoomBtn.addEventListener("click", (e) => {
     })
         .then(response => { })
         .then(data => {
-            console.log("added new room")
             window.location.href = "/chat"
         })
 })
 
-// // TODO: make all names "buttons" that triggers modal where you can se info about the user and set up a private chat. + go their profile page?
-// // move this to another script
+let deleteRoomBtn = document.getElementsByClassName("delete_btn")
+for (let btn of deleteRoomBtn) {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault()
+        let deletedRoom = btn.name
+        fetch(`/chat/${deletedRoom}`, {
+            method: "DELETE"
+        })
+            .then(response => { })
+            .then(data => {
+                window.location.href = "/chat"
+            })
+    })
+}
+
+
+
+
 // fetch("/users")
 //     .then(response => response.json())
 //     .then(users => {
