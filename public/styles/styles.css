@@ -1,19 +1,38 @@
-/* general styling */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+/* ----------------general styling ------------------*/
+html body {
+    font-family: 'Roboto Mono', monospace;  
+}
+
 ul {
     list-style: none;
     padding: 0;
+    text-align: center;
+}
+ul li a {
+    color: black;
+    text-decoration: none;
+}
+ul li a:hover {
+    color: black;
+    text-decoration: none;
 }
 
+.hidden {
+    display: none
+}
 
-/* styling for navigation  */
+/* ----------------styling for navigation------------------------  */
 .navbar {
     background: rgb(255, 255, 255);
-    border-bottom: 1px solid grey;    
+    border-bottom: 1px solid grey;  
+     
 }
 .navbar-collapse {
     text-align: center;
 }
-/* styling for login och register form */
+
+/*----------- styling for login och register form ---------------*/
 #form-container {
     border: 1px solid grey;
     padding: 2rem;
@@ -24,7 +43,48 @@ ul {
     text-align: center;
 }
 
-/* styling for chatroom */
+/*---------------- styling for chat page---------------------- */
+.channels-container {
+    /* border: 1px solid grey; */
+    /* width: 100%; */
+    height: 100px;  
+   
+}
+.channels-container a {
+    padding-left: 1rem;
+}
+.channel-list {
+    height: 100%;
+    overflow-y: auto;
+}
+.channel-item {
+    /* border: 1px solid grey; */
+    font-size: 2rem;
+    height: 3rem;  
+    display: flex;
+}
+.delete_btn {
+    border: none;
+    align-items: center;
+    margin-left: auto;
+    background: inherit;
+}
+.channel-item:hover .hidden{
+    display: inline;
+}
+
+.channel-item:hover {
+    color: black;
+    text-decoration: none;
+    background: rgb(230, 230, 230);
+}
+
+.add-room {
+    /* border: 1px solid grey; */
+    
+}
+
+/* -------------------styling for chatroom----------------- */
 #messages-container {
     height: 100px;
     max-height: 800px;   
@@ -51,12 +111,7 @@ ul {
     display: flex;
 }
 
-/* styling for profile page */
+/* ------------------styling for profile page---------------- */
 .picture-container {
     width: 200px;
-}
-
-/* styling for footer  */
-footer {
-    text-align: center;
 }
