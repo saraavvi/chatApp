@@ -13,10 +13,8 @@
 
 
             <ul id="messages">
-                <!-- there was a prob when tryng to render a chatroom that did not contain any previous messages.
-                should maybe fix this in a better way -->
-
                 <% for(let item of messageList) { %>
+                <% if(item.sender) { %>
                 <li class="message-item">
                     <div class="messagepic-container">
                         <img class="picture" src="/<%=item.sender.profilePic%>" />
@@ -27,7 +25,17 @@
                             <%= item.created.toLocaleTimeString("en-US") %> </span>
                         <div> <%= item.chatmessage %> </div>
                     </div>
+
                 </li>
+                <!-- if the senders account is deleted display this instead: -->
+                <% } else {%>
+                <div>
+                    <b> deleted user</b>
+                    <span> <%= item.created.toLocaleDateString("en-US") %>,
+                        <%= item.created.toLocaleTimeString("en-US") %> </span>
+                    <div> <%= item.chatmessage %> </div>
+                </div>
+                <% } %>
                 <% } %>
 
 

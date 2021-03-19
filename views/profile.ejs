@@ -1,22 +1,19 @@
 <% layout("layouts/boilerplate") %>
 <div>
   <h1>Profile</h1>
+
   <% if(user.profilePic){ %>
+
   <div class="picture-container">
     <img class="img-thumbnail" src="/<%=user.profilePic %>" />
   </div>
 
-  <!-- <p>Change profile picture:</p>
-    <form action="/profile/upload-picture" method="POST" enctype="multipart/form-data">
-        <input type="file" name="picture">
-        <input type="submit" value="Save">
-    </form> -->
   <form action="/profile/delete-picture?_method=DELETE" method="POST">
     <button>Delete picture</button>
   </form>
 
-
   <% } else {%>
+
   <p>Upload profile picture:</p>
   <form action="/profile/upload-picture" method="POST" enctype="multipart/form-data">
     <input type="file" name="picture">
@@ -24,10 +21,94 @@
   </form>
   <% } %>
 
-  <p> Username: <%= user.username %> </p>
-  <p> Email: <%= user.email %> </p>
+  <div>
+    <p> Username: <%= user.username %> </p>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#usernameModal">
+      Edit
+    </button>
+  </div>
+  <div>
+    <p> Email: <%= user.email %> </p>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#emailModal">
+      Edit
+    </button>
+  </div>
 
+  <button type="button" id="delete_account" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+    Delete account
+  </button>
 </div>
+
+<!-- username Modal -->
+<div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="usernameModalLabel">Change username</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/profile/update-username?_method=PUT" method="POST">
+          <input name="name" type="text" placeholder="Username.. ">
+          <input type="submit" value="Update">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- email Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="emailModalLabel">Change email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/profile/update-email?_method=PUT" method="POST">
+          <input name="email" type="text" placeholder="email.. ">
+          <input type="submit" value="Update">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- delete account Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/profile/delete-account?_method=DELETE" method="POST">
+          <label for="delete">Click confirm to delete account</label>
+          <input class="btn btn-danger" id="delete" type="submit" value="Confirm">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- 
 * När en bild laddas upp så sparas den i uploads folder och en referans till bilden 

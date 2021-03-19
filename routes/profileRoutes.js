@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user")
+const Message = require("../models/message")
 const { isLoggedIn } = require("../middlewares/isloggedin")
 const multer = require("multer")
 const fs = require("fs");
@@ -9,7 +10,7 @@ const methodOverride = require('method-override')
 
 router.use(methodOverride('_method'))
 
-const uploadPath = "uploads/"; // flrekommer på flera ställen så skapar den här constanten.
+const uploadPath = "uploads/";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,12 +24,12 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: {
-        files: 1, //begränsning för hur många filer man får ladda upp
-        fieldSize: 2 * 1024 * 1024 // begränsning för hur stora filern får vara. (max 2mb här)
+        files: 1,
+        fieldSize: 2 * 1024 * 1024
     },
-    fileFilter: (request, file, callback) => { //  gör så att man bara ska kunna ladda upp filer med vissa filendelser 
-        if (!file.originalname.match(/\.(jpg|png|gif)$/)) {
-            callback(new Error("only images allowed"), false)
+    fileFilter: (request, file, callback) => {
+        if (!file.originalname.match(/\.(jpg|png|gif|JPG|jpeg)$/)) {
+            return callback(new Error("only images allowed"), false)
         }
         callback(null, true)
     }
@@ -41,10 +42,67 @@ router.get("/:id", isLoggedIn, async (req, res) => {
     console.log(user.profilePic)
     res.render("profile", { user })
 })
-//bilden sparas i uploads nu. todo: fixa så att referens till bilden sparas i databasen.
-router.post("/upload-picture", upload.single("picture"), async (req, res) => {
+
+router.put("/update-username", async (req, res) => {
+    console.log("updating username!")
+    const { name } = req.body;
+    await User.findByIdAndUpdate(req.user._id,
+        { username: name }, { useFindAndModify: false },
+        function (err, result) {
+            if (err) {
+                req.flash("error", "username is not available")
+                res.redirect(`/profile/${req.user._id}`);
+                console.log(err)
+            } else {
+                console.log(result)
+            }
+        }
+    )
+    req.flash("success", "Username updated, please log in again with ypur new username")
+    res.redirect("/login")
+})
+
+router.put("/update-email", async (req, res) => {
+    console.log("updating email!")
+    const { email } = req.body;
+    await User.findByIdAndUpdate(req.user._id,
+        { email: email }, { useFindAndModify: false },
+        function (err, result) {
+            if (err) {
+                req.flash("error", "there is already an account with this email")
+                res.redirect(`/profile/${req.user._id}`);
+                console.log(err)
+            } else {
+                console.log(result)
+            }
+        }
+    )
+    req.flash("success", "Email updated")
+    res.redirect(`/profile/${req.user._id}`);
+
+})
+
+
+router.delete("/delete-account", (req, res) => {
+    const { id } = req.user._id;
+    console.log("deleting account")
+    User.findByIdAndDelete(id,
+        function (err, result) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log(result)
+
+            }
+        }
+    )
+    res.redirect("/")
+})
+
+//bilden sparas i uploads nu och bildens sökväg läggs till i databasen.
+// todo: hantera error på nåt annat sätt än att det bara skrivs ut på sidan
+router.post("/upload-picture", upload.single("picture"), async (req, res, next) => {
     try {
-        console.log(req.file)
         const profileRef = req.file.path;
         if (profileRef) { // om allt gått bra:
             //lägg till bilden i databasen:
@@ -58,7 +116,6 @@ router.post("/upload-picture", upload.single("picture"), async (req, res) => {
                     }
                 }
             )
-
             req.flash("success", "profile picture uploaded")
             res.redirect(`/profile/${req.user._id}`)
         } else {
@@ -69,7 +126,9 @@ router.post("/upload-picture", upload.single("picture"), async (req, res) => {
         console.log(err)
     }
 })
-
+//todo: 
+//pic should be deletet from uploads as well 
+//prob: when there is an error the file is still uploaded to uploads..
 router.delete("/delete-picture", async (req, res) => {
     try {
         console.log("deleting profile pic");

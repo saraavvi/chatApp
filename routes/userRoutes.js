@@ -42,7 +42,7 @@ router.get("/logout", (req, res) => {
     res.redirect("/")
 })
 
-//endpoint to fetch all users
+//endpoint to fetch all users (flytta denna)
 router.get("/users", async (req, res) => {
     const allUsers = await User.find({})
     res.send(allUsers)
