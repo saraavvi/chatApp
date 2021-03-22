@@ -30,10 +30,11 @@ chatForm.addEventListener("submit", (event) => {
 })
 
 
-//recieve broadcasted messages from server:
+//recieve broadcasted messages from server and ads it to the dom:
 socket.on("chat message", msgData => {
     console.log("recieved the broadcasted message " + msgData.msg)
     let newMessage = document.createElement("li")
+    newMessage.id = msgData.msgid;
     newMessage.classList.add("message-item")
     let textContainer = document.createElement("div")
     let chatMessage = document.createElement("div")
@@ -54,7 +55,31 @@ socket.on("chat message", msgData => {
     newMessage.append(textContainer)
 
     messages.append(newMessage);
+})
 
+//emit to server that a messege will be deleted. 
+let deleteMessageBtn = document.getElementsByClassName("delete_btn")
+for (let btn of deleteMessageBtn) {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault()
+        let deletedMessage = btn.name;
+        socket.emit("delete message", {
+            deletedMessage: deletedMessage,
+            username: username
+        })
+    })
+}
+//receives info about a messege being deleted and removes it from the dom. 
+socket.on("delete message", data => {
+    const messages = document.getElementsByClassName("message-item")
+    // ta bort meddelandet från sidan:
+    for (let message of messages) {
+        if (message.id == data.deletedMessage) {
+            message.remove()
+        }
+    }
 
 })
+
+
 

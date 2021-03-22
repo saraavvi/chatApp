@@ -19,6 +19,7 @@ addRoomBtn.addEventListener("click", (e) => {
 })
 
 let deleteRoomBtn = document.getElementsByClassName("delete_btn")
+console.log(deleteRoomBtn)
 for (let btn of deleteRoomBtn) {
     btn.addEventListener("click", (e) => {
         e.preventDefault()

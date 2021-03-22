@@ -48,8 +48,7 @@ app.use(session(sessionConfig))
 app.use(passport.initialize()) // required to initialize passport 
 app.use(passport.session()) // for user to stay logged in and not have to login on every request
 passport.use(new LocalStrategy(User.authenticate())); // use the local strategy. the authenticate-method comes from passport-local-mongoose
-
-//store and unstore the user in the session. theese also comes from passport-local-mongoose
+//store and unstore the user in the session. theese also comes from passport-local-mongoose:
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
@@ -79,15 +78,10 @@ io.on("connection", (socket) => {
         const username = data.username;
         socket.join(roomname)
 
-        //listening to incoming messages, and boadcast
+        //listening to incoming messages from clients
         socket.on("chat message", async data => {
             const user = await User.findOne({ username: username }).exec()
             const picture = user.profilePic;
-            console.log(picture)
-            const msgData = { msg: data.message, sender: username, picture: picture }
-
-            io.to(roomname).emit("chat message", msgData)
-
             const chatmessage = data.message;
             const senderId = user._id;
 
@@ -104,6 +98,43 @@ io.on("connection", (socket) => {
                     console.log(result);
                 }
             })
+            //broadcast to all clients
+            const msgData = { msg: data.message, sender: username, picture: picture, msgid: newMsg._id }
+            io.to(roomname).emit("chat message", msgData)
+        })
+
+        //litening for a client deleting a message. 
+        socket.on("delete message", async data => {
+            const message = await Message.findById(data.deletedMessage);
+            const user = await User.findOne({ username: data.username })
+
+            // Need to be authorized.
+            if (JSON.stringify(user._id) == JSON.stringify(message.sender)) {
+                //broadcast to all clients so that it will be deleted "live" for everyone
+                io.to(roomname).emit("delete message", data)
+                //then delete it from the database aswell: (messages and rooms collection)
+                Room.findByIdAndUpdate(roomid, { $pull: { messages: data.deletedMessage } },
+                    { useFindAndModify: false },
+                    function (err, result) {
+                        if (err) {
+                            console.log(err)
+                        }
+                        else {
+                            console.log(result);
+                        }
+                    })
+                Message.findByIdAndDelete(data.deletedMessage,
+                    function (err, result) {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            console.log(result)
+                        }
+                    }
+                )
+            } else {
+                console.log("you dnot have thepermission to do that")
+            }
         })
     })
 

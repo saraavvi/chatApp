@@ -84,7 +84,7 @@ router.put("/update-email", async (req, res) => {
 
 
 router.delete("/delete-account", (req, res) => {
-    const { id } = req.user._id;
+    const id = req.user._id;
     console.log("deleting account")
     User.findByIdAndDelete(id,
         function (err, result) {
@@ -92,7 +92,6 @@ router.delete("/delete-account", (req, res) => {
                 console.log(err)
             } else {
                 console.log(result)
-
             }
         }
     )
@@ -128,7 +127,6 @@ router.post("/upload-picture", upload.single("picture"), async (req, res, next) 
 })
 //todo: 
 //pic should be deletet from uploads as well 
-//prob: when there is an error the file is still uploaded to uploads..
 router.delete("/delete-picture", async (req, res) => {
     try {
         console.log("deleting profile pic");

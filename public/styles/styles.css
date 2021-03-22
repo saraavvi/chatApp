@@ -110,6 +110,9 @@ ul li a:hover {
     padding: 5px;
     display: flex;
 }
+.message-item:hover .hidden{
+    display: inline;
+}
 
 /* ------------------styling for profile page---------------- */
 .picture-container {
