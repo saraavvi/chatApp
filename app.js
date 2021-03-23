@@ -11,10 +11,12 @@ const chatRoutes = require("./routes/chatRoutes")
 const profileRoutes = require("./routes/profileRoutes")
 const User = require("./models/user")
 const Room = require("./models/room")
-const Message = require("./models/message")
+const Message = require("./models/message");
+const { Socket } = require("socket.io");
 const app = express();
 const http = require("http").Server(app)
 const io = require("socket.io")(http)
+const { userJoins, userLeaves, getUsers } = require("./utils/users")
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 app.use("/public", express.static(path.join(__dirname, 'public')))
@@ -77,10 +79,17 @@ io.on("connection", (socket) => {
         const roomname = room.name
         const username = data.username;
         socket.join(roomname)
+        console.log(`user joined the room ${roomname}`)
+
+        //update online users when a user joins room 
+        userJoins({ username: username, roomname: roomname })
+        const users = getUsers(roomname)
+        console.log(users)
+        io.to(roomname).emit("joined user", users)
 
         //listening to incoming messages from clients
         socket.on("chat message", async data => {
-            const user = await User.findOne({ username: username }).exec()
+            const user = await User.findOne({ username: username })
             const picture = user.profilePic;
             const chatmessage = data.message;
             const senderId = user._id;
@@ -136,13 +145,20 @@ io.on("connection", (socket) => {
                 console.log("you dnot have thepermission to do that")
             }
         })
-    })
 
+        socket.on("disconnect", () => {
+            console.log(`user left the room ${roomname} `)
 
-    socket.on("disconnect", () => {
-        console.log("user disconnected")
+            //update online users when a user leaves room 
+            userLeaves({ username: username, roomname: roomname })
+            const users = getUsers(roomname)
+            io.to(roomname).emit("user leaves", users)
+        })
     })
 })
+
+
+
 
 
 http.listen(3000, () => {

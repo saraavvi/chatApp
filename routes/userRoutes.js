@@ -21,7 +21,7 @@ router.post("/register", async (req, res, next) => {
                 return next(err)
             }
             req.flash("success", `Welcome, ${req.user.username}`)
-            res.redirect("/")
+            res.redirect("/chat")
         })
     } catch (err) {
         req.flash("error", "Username or email already exists")

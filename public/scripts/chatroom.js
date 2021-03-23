@@ -1,20 +1,46 @@
 var socket = io();
-
 let chatForm = document.getElementById("chat-form")
 let chatInput = document.getElementById("chat-input")
 let messages = document.getElementById("messages")
 let messagesContainer = document.getElementById("messages-container")
+let userList = document.getElementById("user-list")
 messages.scrollTop = messages.scrollHeight;
-
 let username = document.getElementById("this_user").innerText;
-
-// get room id from url 
-let url_array = document.location.href.split('/')
+let url_array = document.location.href.split('/') // get room id from url 
 let id = url_array[url_array.length - 1];
+
+//update online users in the dom when a user joins or leaves the room. 
+function updateUserList(users) {
+    //clear userlist first:
+    const items = Array.from(document.querySelectorAll(".userItem"))
+    items.forEach(item => {
+        item.remove()
+    })
+    //prints out updated user list
+    users.forEach(user => {
+        const item = document.createElement("li")
+        item.innerText = user.username;
+        item.classList.add("userItem")
+        userList.append(item)
+    })
+}
 
 socket.emit("join room", {
     id: id,
     username: username
+})
+
+
+socket.on("joined user", users => {
+    console.log("user has joined:")
+    console.log(users)
+    updateUserList(users)
+})
+
+socket.on("user leaves", users => {
+    console.log("user has left:")
+    console.log(users)
+    updateUserList(users)
 })
 
 chatForm.addEventListener("submit", (event) => {
@@ -28,7 +54,6 @@ chatForm.addEventListener("submit", (event) => {
     }
     chatInput.value = "";
 })
-
 
 //recieve broadcasted messages from server and ads it to the dom:
 socket.on("chat message", msgData => {
@@ -53,7 +78,6 @@ socket.on("chat message", msgData => {
     textContainer.append(time);
     textContainer.append(chatMessage);
     newMessage.append(textContainer)
-
     messages.append(newMessage);
 })
 
@@ -78,7 +102,6 @@ socket.on("delete message", data => {
             message.remove()
         }
     }
-
 })
 
 
