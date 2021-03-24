@@ -1,14 +1,14 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="row m-0">
-    <div class="col-md-12 col-sm-12">
-        <h1> <%= currentRoom.name %> </h1>
+<div class="row m-0 d-flex justify-content-center">
+    <div class="col-md-8 col-sm-8 ">
+        <h1 id="room-heading"> # <%= currentRoom.name %> </h1>
     </div>
 </div>
-<div class="row flex-grow-1 m-0">
+<div class="row flex-grow-1 d-flex justify-content-center m-0">
 
     <!-- chat window -->
-    <div class="col-md-8 col-sm-8 border p-2 d-flex flex-column">
+    <div class="col-md-6 col-sm-6 p-2 d-flex flex-column">
         <div id="messages-container" class="border flex-grow-1">
 
 
@@ -17,19 +17,26 @@
                 <% if(item.sender) { %>
                 <li id="<%=item._id%>" class="message-item">
                     <div class="messagepic-container">
+                        <%if(item.sender.profilePic != null){ %>
                         <img class="picture" src="/<%=item.sender.profilePic%>" />
+                        <% } else {%>
+                        <img class="picture" src="/uploads/default.jpg" />
+                        <% } %>
                     </div>
-                    <div>
-                        <b> <%= item.sender.username %> </b>
-                        <span> <%= item.created.toLocaleDateString("en-US") %>,
-                            <%= item.created.toLocaleTimeString("en-US") %> </span>
-                        <div> <%= item.chatmessage %> </div>
+                    <div class="message-container">
+                        <div class="sender-date-container">
+                            <span class="item-sender"> <%= item.sender.username %> </span>
+                            <span class="item-date"> <%= item.created.toLocaleDateString("en-US") %>,
+                                <%= item.created.toLocaleTimeString("en-US") %> </span>
+                        </div>
+                        <div class="item-text"> <%= item.chatmessage %> </div>
                     </div>
-                    <div>
+
+                    <div class="delete-btn-container">
                         <!-- when hovering over your own messages a delete and edit button will show.  -->
                         <% if(JSON.stringify(signedInUser._id) == JSON.stringify(item.sender._id)){ %>
-                        <input class="delete_btn hidden" value="&#10005;" type="button" name="<%=item._id%>">
-                        <input class="edit_btn hidden" value="&#9998;" type="button" name="<%=item._id%>">
+                        <input class="delete_btn hidden" value="x" type="button" name="<%=item._id%>">
+                        <!-- <input class="edit_btn hidden" value="&#9998;" type="button" name="<%=//item._id%>"> -->
                         <% } %>
                     </div>
 
@@ -50,19 +57,22 @@
             </ul>
         </div>
 
-        <form id="chat-form" class="d-flex mt-auto">
+        <form id="chat-form" class="d-flex mt-auto" autocomplete="off">
             <input id="chat-input" type="text" placeholder="enter a message" class="flex-grow-1">
             <input id="send-btn" type="submit" value="Send" class="btn btn-large border ml-auto">
         </form>
     </div>
 
     <!-- show current users in chat here -->
-    <div class="col-md-4 col-sm-4 border p-2">
-        <div>logged in as:</div>
-        <div id="this_user"> <%= signedInUser.username %> </div>
-        <ul id="user-list">
+    <div class="col-md-2 col-sm-2 p-2">
+        <div class="users-container">
+            logged in as
+            <span id="this_user"> <%= signedInUser.username %> </span>
 
-        </ul>
+            <ul id="user-list">
+
+            </ul>
+        </div>
     </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>

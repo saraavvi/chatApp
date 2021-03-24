@@ -9,18 +9,49 @@ let username = document.getElementById("this_user").innerText;
 let url_array = document.location.href.split('/') // get room id from url 
 let id = url_array[url_array.length - 1];
 
+function deleteEmit() {
+    //add eventlisteners to all deletebuttons. emit to server on click. 
+    let deleteMessageBtn = document.getElementsByClassName("delete_btn")
+    for (let btn of deleteMessageBtn) {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault()
+            let deletedMessage = btn.name;
+            socket.emit("delete message", {
+                deletedMessage: deletedMessage,
+                username: username
+            })
+        })
+    }
+}
+
+deleteEmit()
+
 //update online users in the dom when a user joins or leaves the room. 
 function updateUserList(users) {
     //clear userlist first:
-    const items = Array.from(document.querySelectorAll(".userItem"))
+    const items = Array.from(document.querySelectorAll(".user-item"))
     items.forEach(item => {
         item.remove()
     })
     //prints out updated user list
     users.forEach(user => {
         const item = document.createElement("li")
-        item.innerText = user.username;
-        item.classList.add("userItem")
+        const picContainer = document.createElement("div")
+        picContainer.classList.add("messagepic-container-small")
+        const pic = document.createElement("img")
+        pic.classList.add("picture-small");
+
+        if (user.picture != null) {
+            pic.src = `/${user.picture}`;
+        } else {
+            pic.src = "/uploads/default.jpg";
+        }
+        picContainer.append(pic)
+        item.append(picContainer)
+        const name = document.createElement("span")
+        name.innerText = user.username;
+        item.append(name)
+        item.classList.add("user-item")
         userList.append(item)
     })
 }
@@ -67,8 +98,13 @@ socket.on("chat message", msgData => {
     let time = ` ${new Date().toLocaleDateString("en-US")}, ${new Date().toLocaleTimeString("en-US")}`
     let pictureContainer = document.createElement("div")
     let picture = document.createElement("img")
+    let buttonContainer = document.createElement("div")
     picture.classList.add("picture");
-    picture.src = `/${msgData.picture}`;
+    if (msgData.picture != null) {
+        picture.src = `/${msgData.picture}`;
+    } else {
+        picture.src = "/uploads/default.jpg";
+    }
     chatMessage.innerText = msgData.msg;
     sender.innerText = msgData.sender;
     pictureContainer.append(picture);
@@ -77,26 +113,22 @@ socket.on("chat message", msgData => {
     textContainer.append(sender);
     textContainer.append(time);
     textContainer.append(chatMessage);
+    if (msgData.sender == username) {
+        let deleteBtn = document.createElement("input")
+        deleteBtn.classList.add("delete_btn", "hidden")
+        deleteBtn.type = "button"
+        deleteBtn.name = msgData.msgid
+        deleteBtn.value = "x"
+        buttonContainer.append(deleteBtn)
+    }
     newMessage.append(textContainer)
+    newMessage.append(buttonContainer)
     messages.append(newMessage);
+    deleteEmit()
 })
-
-//emit to server that a messege will be deleted. 
-let deleteMessageBtn = document.getElementsByClassName("delete_btn")
-for (let btn of deleteMessageBtn) {
-    btn.addEventListener("click", (e) => {
-        e.preventDefault()
-        let deletedMessage = btn.name;
-        socket.emit("delete message", {
-            deletedMessage: deletedMessage,
-            username: username
-        })
-    })
-}
 //receives info about a messege being deleted and removes it from the dom. 
 socket.on("delete message", data => {
     const messages = document.getElementsByClassName("message-item")
-    // ta bort meddelandet från sidan:
     for (let message of messages) {
         if (message.id == data.deletedMessage) {
             message.remove()

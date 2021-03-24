@@ -78,19 +78,21 @@ io.on("connection", (socket) => {
         const roomid = data.id;
         const roomname = room.name
         const username = data.username;
+        const user = await User.findOne({ username: username })
+        const picture = user.profilePic;
         socket.join(roomname)
-        console.log(`user joined the room ${roomname}`)
+        // console.log(`user joined the room ${roomname}`)
 
         //update online users when a user joins room 
-        userJoins({ username: username, roomname: roomname })
+        userJoins({ username: username, roomname: roomname, picture: picture })
         const users = getUsers(roomname)
         console.log(users)
         io.to(roomname).emit("joined user", users)
 
         //listening to incoming messages from clients
         socket.on("chat message", async data => {
-            const user = await User.findOne({ username: username })
-            const picture = user.profilePic;
+            // const user = await User.findOne({ username: username })
+            // const picture = user.profilePic;
             const chatmessage = data.message;
             const senderId = user._id;
 
@@ -107,8 +109,9 @@ io.on("connection", (socket) => {
                     console.log(result);
                 }
             })
+
             //broadcast to all clients
-            const msgData = { msg: data.message, sender: username, picture: picture, msgid: newMsg._id }
+            const msgData = { msg: data.message, sender: username, picture: picture, msgid: newMsg._id, senderId: senderId }
             io.to(roomname).emit("chat message", msgData)
         })
 
@@ -142,12 +145,12 @@ io.on("connection", (socket) => {
                     }
                 )
             } else {
-                console.log("you dnot have thepermission to do that")
+                console.log("you dont have the permission to do that")
             }
         })
 
         socket.on("disconnect", () => {
-            console.log(`user left the room ${roomname} `)
+            // console.log(`user left the room ${roomname} `)
 
             //update online users when a user leaves room 
             userLeaves({ username: username, roomname: roomname })

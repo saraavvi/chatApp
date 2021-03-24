@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 /* ----------------general styling ------------------*/
 html body {
-    font-family: 'Roboto Mono', monospace;  
+    font-family: 'Roboto', sans-serif;
 }
 
 ul {
@@ -85,10 +85,29 @@ ul li a:hover {
 }
 
 /* -------------------styling for chatroom----------------- */
+#room-heading {
+    font-size: 1rem;
+    font-weight: bolder;
+    padding-top: 1rem;
+    margin: 0;
+}
+
 #messages-container {
     height: 100px;
     max-height: 800px;   
 }
+
+#messages {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.message-item {
+    /* border-bottom: 1px solid rgb(233, 233, 233); */
+    padding: 5px;
+    display: flex;
+}
+
 .messagepic-container {
     height: 40px;
     width: 40px;
@@ -98,20 +117,64 @@ ul li a:hover {
     width: 40px;
     height: 40px;
     object-fit: cover;
+    border-radius: 30%;
 }
 
-#messages {
-    height: 100%;
-    overflow-y: auto;
+.item-text {
+    text-align: left;
+    width: 90%;
 }
 
-.message-item {
-    border: 1px solid grey;
-    padding: 5px;
-    display: flex;
+.message-container{
+    width: 100%;
+    padding-left: 1rem;
 }
+
+.sender-date-container{
+    text-align: left;
+    width: 90%;
+
+}
+.item-sender {
+    font-weight: bolder;
+}
+.item-date {
+    color: rgb(152, 152, 152);
+    font-size: 0.8rem;
+}
+.delete-btn-container{
+    width: 10%;
+}
+
 .message-item:hover .hidden{
     display: inline;
+}
+.message-item:hover{
+    background:rgba(244, 244, 244, 0.808);
+}
+
+.users-container {
+    /* border: 2px solid grey; */
+    font-weight: bolder;
+    background: rgba(244, 244, 244, 0.808);
+    height: 100%;   
+    padding: 0.5rem;
+}
+
+.user-item {
+    display: flex;
+    /* padding-left: 0.5rem; */
+}
+.messagepic-container-small {
+    height: 20px;
+    width: 20px;
+}
+
+.picture-small {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 30%;
 }
 
 /* ------------------styling for profile page---------------- */
