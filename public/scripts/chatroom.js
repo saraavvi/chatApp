@@ -4,10 +4,10 @@ let chatInput = document.getElementById("chat-input")
 let messages = document.getElementById("messages")
 let messagesContainer = document.getElementById("messages-container")
 let userList = document.getElementById("user-list")
-messages.scrollTop = messages.scrollHeight;
 let username = document.getElementById("this_user").innerText;
 let url_array = document.location.href.split('/') // get room id from url 
 let id = url_array[url_array.length - 1];
+messages.scrollTop = messages.scrollHeight;
 
 function deleteEmit() {
     //add eventlisteners to all deletebuttons. emit to server on click. 
@@ -28,30 +28,33 @@ deleteEmit()
 
 //update online users in the dom when a user joins or leaves the room. 
 function updateUserList(users) {
-    //clear userlist first:
     const items = Array.from(document.querySelectorAll(".user-item"))
     items.forEach(item => {
         item.remove()
     })
-    //prints out updated user list
+
     users.forEach(user => {
         const item = document.createElement("li")
+        item.classList.add("user-item")
+
+        const name = document.createElement("span")
+        name.innerText = user.username;
+
         const picContainer = document.createElement("div")
         picContainer.classList.add("messagepic-container-small")
+
         const pic = document.createElement("img")
         pic.classList.add("picture-small");
 
         if (user.picture != null) {
             pic.src = `/${user.picture}`;
         } else {
-            pic.src = "/uploads/default.jpg";
+            pic.src = "/public/images/default.jpg";
         }
+
         picContainer.append(pic)
         item.append(picContainer)
-        const name = document.createElement("span")
-        name.innerText = user.username;
         item.append(name)
-        item.classList.add("user-item")
         userList.append(item)
     })
 }
@@ -63,20 +66,15 @@ socket.emit("join room", {
 
 
 socket.on("joined user", users => {
-    console.log("user has joined:")
-    console.log(users)
     updateUserList(users)
 })
 
 socket.on("user leaves", users => {
-    console.log("user has left:")
-    console.log(users)
     updateUserList(users)
 })
 
 chatForm.addEventListener("submit", (event) => {
     event.preventDefault()
-    //send message to server
     if (chatInput.value) {
         let message = chatInput.value
         socket.emit("chat message", {
@@ -88,31 +86,51 @@ chatForm.addEventListener("submit", (event) => {
 
 //recieve broadcasted messages from server and ads it to the dom:
 socket.on("chat message", msgData => {
-    console.log("recieved the broadcasted message " + msgData.msg)
+
     let newMessage = document.createElement("li")
-    newMessage.id = msgData.msgid;
     newMessage.classList.add("message-item")
-    let textContainer = document.createElement("div")
-    let chatMessage = document.createElement("div")
-    let sender = document.createElement("b")
-    let time = ` ${new Date().toLocaleDateString("en-US")}, ${new Date().toLocaleTimeString("en-US")}`
+    newMessage.id = msgData.msgid;
+
     let pictureContainer = document.createElement("div")
+    pictureContainer.classList.add("messagepic-container")
+
     let picture = document.createElement("img")
-    let buttonContainer = document.createElement("div")
     picture.classList.add("picture");
     if (msgData.picture != null) {
         picture.src = `/${msgData.picture}`;
     } else {
-        picture.src = "/uploads/default.jpg";
+        picture.src = "/public/images/default.jpg";
     }
-    chatMessage.innerText = msgData.msg;
+
+    let textContainer = document.createElement("div")
+    textContainer.classList.add("message-container")
+
+    let senderDateContainer = document.createElement("div")
+    senderDateContainer.classList.add("sender-date-container")
+
+    let sender = document.createElement("span")
+    sender.classList.add("item-sender")
     sender.innerText = msgData.sender;
+
+    let time = document.createElement("span")
+    time.classList.add("item-date")
+    time.innerText = ` ${new Date().toLocaleDateString("en-US")}, ${new Date().toLocaleTimeString("en-US")}`
+
+
+    let chatMessage = document.createElement("div")
+    chatMessage.classList.add("item-text")
+    chatMessage.innerText = msgData.msg;
+
+    let buttonContainer = document.createElement("div")
+    buttonContainer.classList.add("delete-btn-container")
+
     pictureContainer.append(picture);
-    pictureContainer.classList.add("messagepic-container")
+    senderDateContainer.append(sender)
+    senderDateContainer.append(time)
+    textContainer.append(senderDateContainer)
+    textContainer.append(chatMessage)
     newMessage.append(pictureContainer);
-    textContainer.append(sender);
-    textContainer.append(time);
-    textContainer.append(chatMessage);
+
     if (msgData.sender == username) {
         let deleteBtn = document.createElement("input")
         deleteBtn.classList.add("delete_btn", "hidden")
@@ -126,6 +144,7 @@ socket.on("chat message", msgData => {
     messages.append(newMessage);
     deleteEmit()
 })
+
 //receives info about a messege being deleted and removes it from the dom. 
 socket.on("delete message", data => {
     const messages = document.getElementsByClassName("message-item")

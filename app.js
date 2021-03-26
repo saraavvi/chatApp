@@ -54,8 +54,7 @@ passport.use(new LocalStrategy(User.authenticate())); // use the local strategy.
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-//to get access to the user we can use req.user: req.user property will be set to the authenticated user when login
-//using this middleware because I want the user and flash-message to be avaliable in my templates
+//using this middleware so the user and flash-message will be avaliable in all templates
 app.use((req, res, next) => {
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
@@ -64,12 +63,13 @@ app.use((req, res, next) => {
 })
 
 app.use("/", userRoutes) // all routes for register, login, logout ... 
-app.use("/chat", chatRoutes) // chat page and chat root routes.. 
+app.use("/chat", chatRoutes) // chat page and chat room routes.. 
 app.use("/profile", profileRoutes) // profile page and file upload
 
 app.get("/", (req, res) => { //landingpage
     res.render("landingpage")
 })
+
 //move sockets to a separate file later..?
 io.on("connection", (socket) => {
 
@@ -81,18 +81,14 @@ io.on("connection", (socket) => {
         const user = await User.findOne({ username: username })
         const picture = user.profilePic;
         socket.join(roomname)
-        // console.log(`user joined the room ${roomname}`)
 
         //update online users when a user joins room 
         userJoins({ username: username, roomname: roomname, picture: picture })
         const users = getUsers(roomname)
-        console.log(users)
         io.to(roomname).emit("joined user", users)
 
         //listening to incoming messages from clients
         socket.on("chat message", async data => {
-            // const user = await User.findOne({ username: username })
-            // const picture = user.profilePic;
             const chatmessage = data.message;
             const senderId = user._id;
 
@@ -150,8 +146,6 @@ io.on("connection", (socket) => {
         })
 
         socket.on("disconnect", () => {
-            // console.log(`user left the room ${roomname} `)
-
             //update online users when a user leaves room 
             userLeaves({ username: username, roomname: roomname })
             const users = getUsers(roomname)

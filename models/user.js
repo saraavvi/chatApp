@@ -1,16 +1,6 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose")
 
-/*
-I want users collection to look something like this:
-{
-    userID: “3943y7493.....”,
-    email: “mailmailmail”,
-    username: “Sara”,
-    hash: “bqbfjkf8wfw9fw9fwnf9jvw9wvw9vj9w....”
-}
-*/
-
 /* only need to add email in the schema*/
 const UserSchema = new mongoose.Schema({
     email: {

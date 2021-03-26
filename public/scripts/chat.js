@@ -1,10 +1,8 @@
-
 let newRoom = document.getElementById("new_room")
 let addRoomBtn = document.getElementById("add_room")
 addRoomBtn.addEventListener("click", (e) => {
     e.preventDefault()
     let room = { name: newRoom.value }
-    // fetch and post to endpoint on the server: add a room to the room collection :)
     fetch("/chat", {
         method: "POST",
         headers: {
@@ -19,7 +17,6 @@ addRoomBtn.addEventListener("click", (e) => {
 })
 
 let deleteRoomBtn = document.getElementsByClassName("delete_btn")
-console.log(deleteRoomBtn)
 for (let btn of deleteRoomBtn) {
     btn.addEventListener("click", (e) => {
         e.preventDefault()
@@ -33,16 +30,3 @@ for (let btn of deleteRoomBtn) {
             })
     })
 }
-
-
-
-
-// fetch("/users")
-//     .then(response => response.json())
-//     .then(users => {
-//         let usersContainer = document.getElementById("users")
-//         for (let user of users) {
-//             let userElement = `<div>${user.username}</div>`
-//             usersContainer.innerHTML += userElement;
-//         }
-//     })

@@ -24,29 +24,27 @@ router.post("/register", async (req, res, next) => {
             res.redirect("/chat")
         })
     } catch (err) {
-        req.flash("error", "Username or email already exists")
+        req.flash("error", "Sorry, that username or email already exists")
         res.redirect("/register")
     }
 })
-// passport has middleware passport.authenticate() (it compares the hashed passwords for us)
-//to get access to the user later on we can use req.user: req.user property will be set to the authenticated user when login
+// passport.authenticate() compares the hashed passwords
 router.post("/login", passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }), (req, res) => {
     req.flash("success", `Welcome back, ${req.user.username}`)
     res.redirect("/chat")
 })
 
-//with passport there is a logout method added to the request object
+//passport has logout method added to the request object
 router.get("/logout", (req, res) => {
     req.logOut()
-    console.log("Logged out")
     res.redirect("/")
 })
 
 //endpoint to fetch all users (flytta denna)
-router.get("/users", async (req, res) => {
-    const allUsers = await User.find({})
-    res.send(allUsers)
-})
+// router.get("/users", async (req, res) => {
+//     const allUsers = await User.find({})
+//     res.send(allUsers)
+// })
 
 module.exports = router;
 

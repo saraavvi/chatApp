@@ -1,9 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap');
+:root {
+    --main: #665888;
+    --light: #f9f8f7;
+    --speacialblue:#7097cd;
+    --specialpink: #be87b2;
+}
 /* ----------------general styling ------------------*/
 html body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    background: var(--main);
+    color: black;
 }
-
 ul {
     list-style: none;
     padding: 0;
@@ -17,48 +26,76 @@ ul li a:hover {
     color: black;
     text-decoration: none;
 }
-
 .hidden {
     display: none
 }
 
 /* ----------------styling for navigation------------------------  */
 .navbar {
-    background: rgb(255, 255, 255);
-    border-bottom: 1px solid grey;  
-     
+    /* background: var(--light); */
+    /* border-bottom: 1px solid grey; */
+    
 }
 .navbar-collapse {
     text-align: center;
 }
 
-/*----------- styling for login och register form ---------------*/
-#form-container {
-    border: 1px solid grey;
-    padding: 2rem;
+.nav-link {
+    color: black;
 }
 
-/* styling for landing page  */
-#landing-page-message {
+/*----------- styling for login och register form ---------------*/
+
+#form-container h1 {
+    font-family: 'Pacifico', cursive;
     text-align: center;
+    padding: 5px;
+    
 }
+#user-form{
+    display: flex;
+    flex-flow: column;
+}
+#user-form input{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+.user-button {
+    background: var(--specialpink);
+    border: 1px solid black;
+}
+
+/* -----------------styling for landing page--------------------  */
+#landing-page-message {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    text-align: center;
+    /* color: var(--light) */
+}
+.special-link {
+    color: var(--speacialblue)
+}
+.special-link:hover {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 
 /*---------------- styling for chat page---------------------- */
 .channels-container {
-    /* border: 1px solid grey; */
-    /* width: 100%; */
     height: 100px;  
-   
 }
 .channels-container a {
     padding-left: 1rem;
 }
 .channel-list {
+    padding-top: 3rem;
     height: 100%;
     overflow-y: auto;
 }
 .channel-item {
-    /* border: 1px solid grey; */
     font-size: 2rem;
     height: 3rem;  
     display: flex;
@@ -71,69 +108,74 @@ ul li a:hover {
 }
 .channel-item:hover .hidden{
     display: inline;
+    color: var(--specialpink);
 }
-
-.channel-item:hover {
-    color: black;
+.channel-item a:hover {
     text-decoration: none;
-    background: rgb(230, 230, 230);
+    font-size: 2.2rem;
 }
 
-.add-room {
-    /* border: 1px solid grey; */
-    
+#add-channel-btn {
+    color: var(--speacialblue);
+    background: inherit;
+    border: none;
+    font-size: 1.5rem;
+    font-family: 'Pacifico', cursive;
 }
 
 /* -------------------styling for chatroom----------------- */
 #room-heading {
-    font-size: 1rem;
-    font-weight: bolder;
-    padding-top: 1rem;
+    padding: 1rem 0 1rem 0;
     margin: 0;
 }
-
 #messages-container {
     height: 100px;
-    max-height: 800px;   
+    max-height: 800px;  
+    background: var(--light); 
+    border-radius: 5px 0 0 0
 }
-
 #messages {
     height: 100%;
     overflow-y: auto;
 }
+#chat-input {
+    border-radius: 0 0 0 5px;
+    border: none;
+    padding-left: 1rem;
+}
+#chat-input:focus {
+    outline: none;
+}
 
+#send-btn {
+    border: none;
+    padding: 0.5rem;
+}
 .message-item {
-    /* border-bottom: 1px solid rgb(233, 233, 233); */
     padding: 5px;
     display: flex;
 }
-
 .messagepic-container {
     height: 40px;
     width: 40px;
 }
-
 .picture {
     width: 40px;
     height: 40px;
     object-fit: cover;
     border-radius: 30%;
 }
-
 .item-text {
     text-align: left;
     width: 90%;
 }
-
 .message-container{
     width: 100%;
     padding-left: 1rem;
 }
-
 .sender-date-container{
     text-align: left;
     width: 90%;
-
 }
 .item-sender {
     font-weight: bolder;
@@ -145,31 +187,32 @@ ul li a:hover {
 .delete-btn-container{
     width: 10%;
 }
-
 .message-item:hover .hidden{
     display: inline;
 }
 .message-item:hover{
-    background:rgba(244, 244, 244, 0.808);
+    background:rgba(244, 244, 244);
 }
-
 .users-container {
-    /* border: 2px solid grey; */
-    font-weight: bolder;
-    background: rgba(244, 244, 244, 0.808);
+    background: rgba(244, 244, 244);
     height: 100%;   
-    padding: 0.5rem;
+    border-radius: 0 5px 5px 0;
+}
+#this-user-container{
+    background: #efefef;
+    border-radius: 0 5px 0 0;
+    font-weight: 800;
+    padding: 5px;    
 }
 
 .user-item {
     display: flex;
-    /* padding-left: 0.5rem; */
+    padding-left: 5px;
 }
 .messagepic-container-small {
     height: 20px;
     width: 20px;
 }
-
 .picture-small {
     width: 20px;
     height: 20px;
@@ -178,6 +221,30 @@ ul li a:hover {
 }
 
 /* ------------------styling for profile page---------------- */
-.picture-container {
+.profile-picture-container {
+    height: 200px;
+    width: 200px;   
+}
+.profile-picture {
     width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+/*-------------------styling for footer---------------------- */
+footer {
+ background: var(--main);
+}
+
+/*---------------------styling for flash messages---------------*/
+.success {
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--specialpink);
+    font-family: 'Pacifico', cursive;
+}
+.danger {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #eaa561;
+    font-family: 'Pacifico', cursive;
 }

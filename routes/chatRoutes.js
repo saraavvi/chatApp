@@ -6,13 +6,10 @@ const { isLoggedIn } = require("../middlewares/isloggedin")
 
 // show all rooms
 router.get("/", isLoggedIn, async (req, res) => {
-    // console.log("current user:" + req.user)
     const rooms = await Room.find({})
-
     res.render("chat", { rooms })
 
 })
-
 //to a specific room
 // also get all the previous messages in this room from the db and send to template
 router.get("/:id", isLoggedIn, async (req, res) => {
@@ -28,7 +25,6 @@ router.get("/:id", isLoggedIn, async (req, res) => {
         return Promise.all(oldMessages)
     })
         .then(messageList => {
-            // console.log(messageList)
             res.render("chatroom", { id, user, currentRoom, messageList })
         })
 })

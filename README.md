@@ -5,7 +5,9 @@ using passport for autentication
 
 socket.io 
 
-ejs and ejs-mate
+ejs 
+
+css
 
 bootstrap
 
