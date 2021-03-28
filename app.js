@@ -29,8 +29,7 @@ app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
-// 'mongodb://localhost:27017/chatApp'
-const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/chatApp';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => {
@@ -50,9 +49,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(flash())
 
+const secret = process.env.SECRET || "secret";
+
 const store = new MongoStore({
     url: dbUrl,
-    secret: "secret",
+    secret
     // touchAfter: 24 * 60 * 60
 })
 
@@ -63,7 +64,7 @@ store.on("error", function (err) {
 const sessionConfig = { // hur fixar man expiration för kakan?
     store,
     name: "session",
-    secret: "secret",
+    secret,
     resave: false,
     saveUninitialized: true,
 }
