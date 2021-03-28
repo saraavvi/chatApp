@@ -1,8 +1,13 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const flash = require("connect-flash")
@@ -24,7 +29,10 @@ app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
-mongoose.connect('mongodb://localhost:27017/chatApp', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+// 'mongodb://localhost:27017/chatApp'
+const dbUrl = process.env.DB_URL;
+
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => {
         console.log("mongo is connected")
     })
@@ -32,6 +40,7 @@ mongoose.connect('mongodb://localhost:27017/chatApp', { useNewUrlParser: true, u
         console.log("Error in mongo connection")
         console.log(err)
     })
+
 
 app.engine("ejs", ejsMate)
 app.set("views", path.join(__dirname, "views"));
@@ -41,7 +50,19 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(flash())
 
+const store = new MongoStore({
+    url: dbUrl,
+    secret: "secret",
+    // touchAfter: 24 * 60 * 60
+})
+
+store.on("error", function (err) {
+    console.log("store error.. ", err)
+})
+
 const sessionConfig = { // hur fixar man expiration för kakan?
+    store,
+    name: "session",
     secret: "secret",
     resave: false,
     saveUninitialized: true,
