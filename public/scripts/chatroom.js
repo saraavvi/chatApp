@@ -46,8 +46,8 @@ function updateUserList(users) {
         const pic = document.createElement("img")
         pic.classList.add("picture-small");
 
-        if (user.picture != null) {
-            pic.src = `/${user.picture}`;
+        if (user.picture) {
+            pic.src = user.picture;
         } else {
             pic.src = "/public/images/default.jpg";
         }

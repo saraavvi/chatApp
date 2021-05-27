@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require("../models/user")
 const { isLoggedIn } = require("../middlewares/isloggedin")
 const multer = require("multer")
+const { storage } = require("../cloudinary");
+const upload = multer({ storage });
 const fs = require("fs");
 const { unlink } = require('fs');
 const path = require("path")
@@ -12,32 +14,32 @@ const methodOverride = require('method-override')
 
 router.use(methodOverride('_method'))
 
-const uploadPath = "uploads/";
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadPath)
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
-    }
-})
-
-const upload = multer({
-    storage: storage,
-    limits: {
-        files: 1,
-        fieldSize: 2 * 1024 * 1024
-    },
-    fileFilter: (request, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|png|gif|JPG|jpeg)$/)) {
-            return callback(new Error("only images allowed"), false)
+router.post("/upload-picture", isLoggedIn, upload.single("picture"), async (req, res, next) => {
+    console.log(req.file);
+    try {
+        if (req.file) {
+            //lägg till bilden i databasen:
+            const updatePicture = await User.findByIdAndUpdate(req.user._id,
+                { profilePicUrl: req.file.path, profilePicName: req.file.filename }, { useFindAndModify: false },
+                function (err, result) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log(result)
+                    }
+                }
+            )
+            res.redirect(`/profile/${req.user._id}`)
+        } else {
+            req.flash("error", "could not upload profile picture")
+            res.redirect(`/profile/${req.user._id}`)
         }
-        callback(null, true)
+    } catch (err) {
+        console.log(err)
     }
 })
 
-//a users profilepage
 router.get("/:id", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -97,44 +99,16 @@ router.delete("/delete-account", isLoggedIn, (req, res) => {
     res.redirect("/")
 })
 
-//bilden sparas i uploads nu och bildens sökväg läggs till i databasen.
-// todo: hantera error på nåt annat sätt än att det bara skrivs ut på sidan
-router.post("/upload-picture", isLoggedIn, upload.single("picture"), async (req, res, next) => {
-    try {
-        const profileRef = req.file.path;
-        if (profileRef) {
-            //lägg till bilden i databasen:
-            const updatePicture = await User.findByIdAndUpdate(req.user._id,
-                { profilePic: profileRef }, { useFindAndModify: false },
-                function (err, result) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        console.log(result)
-                    }
-                }
-            )
-            res.redirect(`/profile/${req.user._id}`)
-        } else {
-            req.flash("error", "could not upload profile picture")
-            res.redirect(`/profile/${req.user._id}`)
-        }
-    } catch (err) {
-        console.log(err)
-    }
-})
-//todo: 
-//pic is deleted from uploads and from database. 
+//pic is deleted from cloudinary and from database. 
 router.delete("/delete-picture", isLoggedIn, async (req, res) => {
     try {
         console.log("deleting profile pic");
         const user = await User.findById(req.user._id);
-        const deletedPicture = user.profilePic;
-        console.log(deletedPicture)
-        unlink(`./${deletedPicture}`, (err) => {
-            if (err) console.error(err)
-        })
-        await User.findByIdAndUpdate(req.user._id, { profilePic: null }, { useFindAndModify: false },
+        const deletedPictureName = user.profilePicName;
+
+        cloudinary.uploader.destroy(deletedPictureName);
+
+        await User.findByIdAndUpdate(req.user._id, { profilePicUrl: null, profilePicName: null }, { useFindAndModify: false },
             function (err, result) {
                 if (err) {
                     console.log(err)

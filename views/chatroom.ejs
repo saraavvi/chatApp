@@ -16,8 +16,8 @@
                 <% if(item.sender) { %>
                 <li id="<%=item._id%>" class="message-item">
                     <div class="messagepic-container">
-                        <%if(item.sender.profilePic != null){ %>
-                        <img class="picture" src="/<%=item.sender.profilePic%>" />
+                        <%if(item.sender.profilePicUrl){ %>
+                        <img class="picture" src="<%=item.sender.profilePicUrl%>" />
                         <% } else {%>
                         <img class="picture" src="/public/images/default.jpg" />
                         <% } %>

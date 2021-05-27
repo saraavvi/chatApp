@@ -8,9 +8,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    profilePic: {
-        type: String
-    }
+    profilePicUrl: String,
+    profilePicName: String
 })
 /* this will be added to the schema and: adds a username- and password-field*/
 UserSchema.plugin(passportLocalMongoose);

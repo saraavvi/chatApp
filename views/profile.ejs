@@ -3,10 +3,10 @@
   <div class="col-md-12">
     <h4 class="border-bottom">Edit your profile</h4>
 
-    <% if(user.profilePic){ %>
+    <% if(user.profilePicUrl){ %>
 
     <div class="profile-picture-container">
-      <img class="profile-picture" src="/<%=user.profilePic %>" />
+      <img class="profile-picture" src="<%=user.profilePicUrl %>" />
     </div>
 
     <form action="/profile/delete-picture?_method=DELETE" method="POST">
