@@ -96,8 +96,8 @@ socket.on("chat message", msgData => {
 
     let picture = document.createElement("img")
     picture.classList.add("picture");
-    if (msgData.picture != null) {
-        picture.src = `/${msgData.picture}`;
+    if (msgData.picture) {
+        picture.src = msgData.picture;
     } else {
         picture.src = "/public/images/default.jpg";
     }
