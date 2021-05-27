@@ -5,6 +5,7 @@ const User = require("../models/user")
 const { isLoggedIn } = require("../middlewares/isloggedin")
 const multer = require("multer")
 const { storage } = require("../cloudinary");
+const { cloudinary } = require("../cloudinary");
 const upload = multer({ storage });
 const fs = require("fs");
 const { unlink } = require('fs');
