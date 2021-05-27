@@ -3,6 +3,10 @@ const router = express.Router();
 const passport = require("passport")
 const User = require("../models/user")
 
+/**
+ * routes that handle user login and register 
+ */
+
 router.get("/login", (req, res) => {
     res.render("login")
 })
@@ -15,7 +19,7 @@ router.post("/register", async (req, res, next) => {
     try {
         const { email, username, password } = req.body;
         const user = new User({ email, username })
-        const registeredUser = await User.register(user, password) // takes the new user we created and hash and store the password on it
+        const registeredUser = await User.register(user, password)
         req.login(registeredUser, err => {
             if (err) {
                 return next(err)
@@ -28,23 +32,16 @@ router.post("/register", async (req, res, next) => {
         res.redirect("/register")
     }
 })
-// passport.authenticate() compares the hashed passwords
+
 router.post("/login", passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }), (req, res) => {
     req.flash("success", `Welcome back, ${req.user.username}`)
     res.redirect("/chat")
 })
 
-//passport has logout method added to the request object
 router.get("/logout", (req, res) => {
     req.logOut()
     res.redirect("/")
 })
-
-//endpoint to fetch all users (flytta denna)
-// router.get("/users", async (req, res) => {
-//     const allUsers = await User.find({})
-//     res.send(allUsers)
-// })
 
 module.exports = router;
 

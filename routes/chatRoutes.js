@@ -4,14 +4,29 @@ const Room = require("../models/room");
 const Message = require("../models/message");
 const { isLoggedIn } = require("../middlewares/isloggedin")
 
-// show all rooms
+/**
+ * display a list of all chat rooms
+ */
 router.get("/", isLoggedIn, async (req, res) => {
     const rooms = await Room.find({})
     res.render("chat", { rooms })
 
 })
-//to a specific room
-// also get all the previous messages in this room from the db and send to template
+
+/**
+ * a user can create a new chat room
+ */
+router.post("/", isLoggedIn, async (req, res) => {
+    const { name } = req.body;
+    const newRoom = await new Room({ name: name, creator: req.user._id })
+    newRoom.save()
+    res.end("room was added")
+})
+
+/**
+ * visit a chat room. 
+ * All old messages will be displayd.
+ */
 router.get("/:id", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const currentRoom = await Room.findById(id);
@@ -29,17 +44,9 @@ router.get("/:id", isLoggedIn, async (req, res) => {
         })
 })
 
-//endpoint for adding a new room
-router.post("/", isLoggedIn, async (req, res) => {
-    const { name } = req.body;
-    const newRoom = await new Room({ name: name, creator: req.user._id })
-    newRoom.save()
-    res.end("room was added")
-})
-
-//endpoint for deleting a room 
-//todo: id a room is deleted, all the messages in that room should also be deleted
-// want to make sure that the user is loggedin but also that the user is allowed to delete this chatroom (authorized)
+/**
+ * users can only delete chat rooms that thay have created themselves
+ */
 router.delete("/:id", isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const room = await Room.findById(id).populate("creator")

@@ -35,10 +35,6 @@ The user should be able to:
 
 ## View it live 
 
-:red_circle: Stuff needs to be fixed.. :red_circle:
-- :small_red_triangle_down: Fileuploads only works locally right now. Will fix this with Cloudinary soon.
-- :small_red_triangle_down: Registration och login validation
-
 https://frozen-plateau-57390.herokuapp.com/
 
 

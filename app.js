@@ -23,12 +23,15 @@ const http = require("http").Server(app)
 const io = require("socket.io")(http)
 const { userJoins, userLeaves, getUsers } = require("./utils/users")
 
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
 app.use("/public", express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
+/**
+ * database connection
+ */
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/chatApp';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -39,7 +42,6 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCr
         console.log("Error in mongo connection")
         console.log(err)
     })
-
 
 app.engine("ejs", ejsMate)
 app.set("views", path.join(__dirname, "views"));
@@ -54,29 +56,30 @@ const secret = process.env.SECRET || "secret";
 const store = new MongoStore({
     url: dbUrl,
     secret
-    // touchAfter: 24 * 60 * 60
 })
 
 store.on("error", function (err) {
     console.log("store error.. ", err)
 })
 
-const sessionConfig = { // hur fixar man expiration för kakan?
+const sessionConfig = {
     store,
     name: "session",
     secret,
     resave: false,
     saveUninitialized: true,
 }
+
 app.use(session(sessionConfig))
-app.use(passport.initialize()) // required to initialize passport 
-app.use(passport.session()) // for user to stay logged in and not have to login on every request
-passport.use(new LocalStrategy(User.authenticate())); // use the local strategy. the authenticate-method comes from passport-local-mongoose
-//store and unstore the user in the session. theese also comes from passport-local-mongoose:
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-//using this middleware so the user and flash-message will be avaliable in all templates
+/**
+ * want flash messages and user data to be avaliable in all templates 
+ */
 app.use((req, res, next) => {
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
@@ -84,15 +87,18 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use("/", userRoutes) // all routes for register, login, logout ... 
-app.use("/chat", chatRoutes) // chat page and chat room routes.. 
-app.use("/profile", profileRoutes) // profile page and file upload
 
-app.get("/", (req, res) => { //landingpage
+app.use("/", userRoutes)
+app.use("/chat", chatRoutes)
+app.use("/profile", profileRoutes)
+
+app.get("/", (req, res) => {
     res.render("landingpage")
 })
 
-//move sockets to a separate file later..?
+/**
+ * socket stuff
+ */
 io.on("connection", (socket) => {
 
     socket.on("join room", async (data) => {
@@ -175,9 +181,6 @@ io.on("connection", (socket) => {
         })
     })
 })
-
-
-
 
 const port = process.env.PORT || 3000;
 http.listen(port, () => {
