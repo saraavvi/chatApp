@@ -1,14 +1,43 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="row m-0 d-flex justify-content-center">
-    <div class="col-md-8 col-sm-8 ">
-        <h1 id="room-heading"> # <%= currentRoom.name %> </h1>
+<div class="row border-top ">
+    <div class="col-md-12 d-flex pt-3">
+        <p id="room-heading"> # <%= currentRoom.name %> ( </p>
+        <p>logged in as <span id="this_user"> <%= signedInUser.username %> </span></p>)
     </div>
 </div>
-<div class="row flex-grow-1 d-flex justify-content-center m-0">
+
+<div class="row h-100 flex-nowrap">
+
+    <div class="sidebar-container d-flex flex-column  ">
+        <div class="sidebar flex-grow-1">
+            <div class="sidebar-content border-top">
+
+                <!-- current users list-->
+                <p class="sidebar-heading">online users</p>
+                <ul id="user-list" class="sidebar-list  pb-2">
+
+                </ul>
+
+                <!-- channel list -->
+                <p class="sidebar-heading">channels</p>
+                <ul class="sidebar-list">
+                    <% for(let i = 0; i < rooms.length; i++) {  %>
+                    <li class="sidebar-item"><a href="/chat/<%=rooms[i]._id%>"> # <%= rooms[i].name %> </a>
+                        <!-- if current user is the creater of the room: add a delete button as well -->
+                        <% if(JSON.stringify(signedInUser._id) == JSON.stringify(rooms[i].creator)) {%>
+                        <input class="delete_btn hidden" value="&#10005;" type="button" name="<%=rooms[i].id%>">
+                        <% } %>
+                    </li>
+                    <% } %>
+                </ul>
+
+            </div>
+        </div>
+    </div>
 
     <!-- chat window -->
-    <div class="col-md-6 col-sm-6 d-flex flex-column p-0">
+    <div class="col d-flex flex-column border p-0 ">
         <div id="messages-container" class="flex-grow-1">
 
             <ul id="messages">
@@ -53,24 +82,14 @@
             </ul>
         </div>
 
-        <form id="chat-form" class="d-flex mt-auto" autocomplete="off">
+        <form id="chat-form" class="d-flex mt-auto border" autocomplete="off">
             <input id="chat-input" type="text" placeholder="Message" class="flex-grow-1">
             <input id="send-btn" type="submit" value="Send" class="ml-auto">
         </form>
     </div>
 
-    <!-- show current users in chat here -->
-    <div class="col-md-2 col-sm-3 p-0">
-        <div class="users-container">
-            <div id="this-user-container">
-                logged in as
-                <span id="this_user"> <%= signedInUser.username %> </span>
-            </div>
-            <ul id="user-list">
 
-            </ul>
-        </div>
-    </div>
 </div>
+<script src="/public/scripts/chat.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/public/scripts/chatroom.js"></script>

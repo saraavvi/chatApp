@@ -28,6 +28,7 @@ router.post("/", isLoggedIn, async (req, res) => {
  * All old messages will be displayd.
  */
 router.get("/:id", isLoggedIn, async (req, res) => {
+    const rooms = await Room.find({})
     const { id } = req.params;
     const currentRoom = await Room.findById(id);
     const user = req.user;
@@ -40,7 +41,7 @@ router.get("/:id", isLoggedIn, async (req, res) => {
         return Promise.all(oldMessages)
     })
         .then(messageList => {
-            res.render("chatroom", { id, user, currentRoom, messageList })
+            res.render("chatroom", { id, user, currentRoom, messageList, rooms })
         })
 })
 

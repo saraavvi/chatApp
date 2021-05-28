@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap');
 :root {
-    --main: #665888;
+    /* --main: #665888; */
     --light: #f9f8f7;
     --speacialblue:#7097cd;
     --specialpink: #be87b2;
@@ -10,13 +10,14 @@
 /* ----------------general styling ------------------*/
 html body {
     font-family: 'Open Sans', sans-serif;
-    background: var(--main);
+    /* background: var(--main); */
     color: black;
 }
 ul {
     list-style: none;
     padding: 0;
     text-align: center;
+    margin: 0 !important;
 }
 ul li a {
     color: black;
@@ -124,25 +125,64 @@ ul li a:hover {
 }
 
 /* -------------------styling for chatroom----------------- */
-#room-heading {
-    padding: 1rem 0 1rem 0;
+ #room-heading {
+    /* padding: 1rem 0 1rem 0; */
     margin: 0;
 }
+
 #messages-container {
     height: 100px;
-    max-height: 800px;  
-    background: var(--light); 
+    /* max-height: 800px;   */
+    /* background: var(--light);  */
     border-radius: 5px 0 0 0
 }
 #messages {
     height: 100%;
     overflow-y: auto;
 }
+
+.sidebar-container {
+    width: 300px;
+    background: var(--light);
+    
+    /* max-height: 500px; */
+
+}
+.sidebar {
+    height: 100px;
+
+}
+.sidebar-content {
+    height: 100%;
+    overflow-y: auto;
+    
+}
+
+.sidebar-heading {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    
+}
+
+.sidebar-list {
+
+    text-align: left;
+    padding-left: 1rem;
+
+}
+
+.sidebar-item:hover {
+    background: white;
+}
+
+
+
 #chat-input {
-    border-radius: 0 0 0 5px;
+    /* border-radius: 0 0 0 5px; */
     border: none;
     padding-left: 1rem;
 }
+
 #chat-input:focus {
     outline: none;
 }
@@ -151,20 +191,24 @@ ul li a:hover {
     border: none;
     padding: 0.5rem;
 }
+
 .message-item {
     padding: 5px;
     display: flex;
 }
+
 .messagepic-container {
     height: 40px;
     width: 40px;
 }
+
 .picture {
     width: 40px;
     height: 40px;
     object-fit: cover;
     border-radius: 30%;
 }
+
 .item-text {
     text-align: left;
     width: 90%;
@@ -184,6 +228,7 @@ ul li a:hover {
     color: rgb(152, 152, 152);
     font-size: 0.8rem;
 }
+
 .delete-btn-container{
     width: 10%;
 }
@@ -193,6 +238,7 @@ ul li a:hover {
 .message-item:hover{
     background:rgba(244, 244, 244);
 }
+/*
 .users-container {
     background: rgba(244, 244, 244);
     height: 100%;   
@@ -204,21 +250,23 @@ ul li a:hover {
     font-weight: 800;
     padding: 5px;    
 }
-
+*/
 .user-item {
     display: flex;
-    padding-left: 5px;
+    /* padding-left: 5px; */
 }
+
 .messagepic-container-small {
     height: 20px;
     width: 20px;
 }
+
 .picture-small {
     width: 20px;
     height: 20px;
     object-fit: cover;
     border-radius: 30%;
-}
+} 
 
 /* ------------------styling for profile page---------------- */
 .profile-picture-container {
