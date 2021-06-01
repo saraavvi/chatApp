@@ -2,15 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap');
 :root {
-    /* --main: #665888; */
     --light: #f9f8f7;
-    --speacialblue:#7097cd;
-    --specialpink: #be87b2;
 }
 /* ----------------general styling ------------------*/
 html body {
     font-family: 'Open Sans', sans-serif;
-    /* background: var(--main); */
     color: black;
 }
 ul {
@@ -33,8 +29,8 @@ ul li a:hover {
 
 /* ----------------styling for navigation------------------------  */
 .navbar {
-    /* background: var(--light); */
-    /* border-bottom: 1px solid grey; */
+    margin-right: -15px;
+    margin-left: -15px;
     
 }
 .navbar-collapse {
@@ -50,9 +46,9 @@ ul li a:hover {
 #form-container h1 {
     font-family: 'Pacifico', cursive;
     text-align: center;
-    padding: 5px;
-    
+    padding: 5px;   
 }
+
 #user-form{
     display: flex;
     flex-flow: column;
@@ -63,7 +59,6 @@ ul li a:hover {
     border-radius: 5px;
 }
 .user-button {
-    background: var(--specialpink);
     border: 1px solid black;
 }
 
@@ -75,7 +70,6 @@ ul li a:hover {
     /* color: var(--light) */
 }
 .special-link {
-    color: var(--speacialblue)
 }
 .special-link:hover {
     color: inherit;
@@ -90,11 +84,12 @@ ul li a:hover {
 }
 .channels-container a {
     padding-left: 1rem;
+    width: 100%;
 }
 .channel-list {
-    padding-top: 3rem;
     height: 100%;
     overflow-y: auto;
+    
 }
 .channel-item {
     font-size: 2rem;
@@ -106,18 +101,19 @@ ul li a:hover {
     align-items: center;
     margin-left: auto;
     background: inherit;
+    
 }
 .channel-item:hover .hidden{
     display: inline;
-    color: var(--specialpink);
+    
 }
 .channel-item a:hover {
     text-decoration: none;
     font-size: 2.2rem;
+    background: var(--light);
 }
 
 #add-channel-btn {
-    color: var(--speacialblue);
     background: inherit;
     border: none;
     font-size: 1.5rem;
@@ -126,14 +122,11 @@ ul li a:hover {
 
 /* -------------------styling for chatroom----------------- */
  #room-heading {
-    /* padding: 1rem 0 1rem 0; */
     margin: 0;
 }
 
 #messages-container {
     height: 100px;
-    /* max-height: 800px;   */
-    /* background: var(--light);  */
     border-radius: 5px 0 0 0
 }
 #messages {
@@ -144,41 +137,30 @@ ul li a:hover {
 .sidebar-container {
     width: 300px;
     background: var(--light);
-    
-    /* max-height: 500px; */
-
 }
 .sidebar {
     height: 100px;
-
 }
 .sidebar-content {
     height: 100%;
-    overflow-y: auto;
-    
+    overflow-y: auto;  
 }
 
 .sidebar-heading {
     padding-left: 1rem;
-    padding-top: 1rem;
-    
+    padding-top: 1rem; 
 }
 
 .sidebar-list {
-
     text-align: left;
     padding-left: 1rem;
-
 }
 
 .sidebar-item:hover {
     background: white;
 }
 
-
-
 #chat-input {
-    /* border-radius: 0 0 0 5px; */
     border: none;
     padding-left: 1rem;
 }
@@ -238,22 +220,9 @@ ul li a:hover {
 .message-item:hover{
     background:rgba(244, 244, 244);
 }
-/*
-.users-container {
-    background: rgba(244, 244, 244);
-    height: 100%;   
-    border-radius: 0 5px 5px 0;
-}
-#this-user-container{
-    background: #efefef;
-    border-radius: 0 5px 0 0;
-    font-weight: 800;
-    padding: 5px;    
-}
-*/
+
 .user-item {
     display: flex;
-    /* padding-left: 5px; */
 }
 
 .messagepic-container-small {
@@ -277,22 +246,4 @@ ul li a:hover {
     width: 200px;
     height: 200px;
     object-fit: cover;
-}
-/*-------------------styling for footer---------------------- */
-footer {
- background: var(--main);
-}
-
-/*---------------------styling for flash messages---------------*/
-.success {
-    font-size: 1.5rem;
-    text-align: center;
-    color: var(--specialpink);
-    font-family: 'Pacifico', cursive;
-}
-.danger {
-    font-size: 1.5rem;
-    text-align: center;
-    color: #eaa561;
-    font-family: 'Pacifico', cursive;
 }
