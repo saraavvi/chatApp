@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const AppError = require("../utils/AppError");
+const wrapAsync = require("../utils/wrapAsync")
 const User = require("../models/user")
 const { isLoggedIn } = require("../middlewares/isloggedin")
 const multer = require("multer")
@@ -8,8 +10,7 @@ const { cloudinary } = require("../cloudinary");
 const upload = multer({ storage });
 const path = require("path")
 const methodOverride = require('method-override')
-const AppError = require("../utils/AppError");
-const wrapAsync = require("../utils/wrapAsync")
+
 
 router.use(methodOverride('_method'))
 
@@ -41,25 +42,26 @@ router.post("/upload-picture", isLoggedIn, upload.single("picture"), wrapAsync(a
 
 router.put("/update-username", isLoggedIn, wrapAsync(async (req, res, next) => {
     const { name } = req.body;
-    await User.findByIdAndUpdate(req.user._id,
-        { username: name }, { useFindAndModify: false }
-    )
+    try {
+        await User.findByIdAndUpdate(req.user._id,
+            { username: name }, { useFindAndModify: false }
+        )
+    } catch {
+        throw new AppError("that username is not available", 401);
+    }
     req.flash("success", "Username updated, please log in again with ypur new username")
     res.redirect("/login")
 }));
 
 router.put("/update-email", isLoggedIn, wrapAsync(async (req, res, next) => {
     const { email } = req.body;
-    await User.findByIdAndUpdate(req.user._id,
-        { email: email }, { useFindAndModify: false },
-        function (err, result) {
-            if (err) {
-                return next(new AppError("email not available", 404));
-            } else {
-                console.log(result)
-            }
-        }
-    )
+    try {
+        await User.findByIdAndUpdate(req.user._id,
+            { email: email }, { useFindAndModify: false }
+        )
+    } catch {
+        throw new AppError("that email is not available", 401);
+    }
     req.flash("success", "Email updated")
     res.redirect(`/profile/${req.user._id}`);
 }));
@@ -96,17 +98,5 @@ router.delete("/delete-picture", isLoggedIn, wrapAsync(async (req, res) => {
     )
     res.redirect(`/profile/${req.user._id}`)
 }));
-
-/**
- * error handler middleware
- */
-router.use((err, req, res, next) => {
-    const { status = 500 } = err; // default status code
-    if (!err.message) {
-        err.message = "something went wrong";
-    }
-    req.flash("error", err.message)
-    res.status(status).redirect(`/profile/${req.user._id}`)
-})
 
 module.exports = router

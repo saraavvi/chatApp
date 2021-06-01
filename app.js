@@ -182,6 +182,23 @@ io.on("connection", (socket) => {
     })
 })
 
+/**
+ * error handler middleware
+ */
+// app.use((err, req, res, next) => {
+//     console.log(err.name)
+//     next(err);
+// })
+
+app.use((err, req, res, next) => {
+    const { status = 500 } = err; // default status code
+    if (!err.message) {
+        err.message = "something went wrong";
+    }
+    req.flash("error", err.message)
+    res.status(status).redirect('back')
+})
+
 const port = process.env.PORT || 3000;
 http.listen(port, () => {
     console.log(`listening on port ${port}`)

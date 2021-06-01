@@ -3,6 +3,8 @@ const router = express.Router();
 const Room = require("../models/room");
 const Message = require("../models/message");
 const { isLoggedIn } = require("../middlewares/isloggedin")
+const AppError = require("../utils/AppError");
+const wrapAsync = require("../utils/wrapAsync")
 
 /**
  * display a list of all chat rooms

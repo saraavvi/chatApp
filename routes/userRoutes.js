@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport")
 const User = require("../models/user")
+const AppError = require("../utils/AppError");
+const wrapAsync = require("../utils/wrapAsync")
 
 /**
  * routes that handle user login and register 
