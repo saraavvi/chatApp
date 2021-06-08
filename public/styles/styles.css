@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap');
 :root {
     --light: #f9f8f7;
-    --special: #b567ed;
+    --special: #e3bbee;
 }
 /* ----------------general styling ------------------*/
 html body {
@@ -61,6 +61,7 @@ ul li a:hover {
 }
 .user-button {
     border: 1px solid black;
+    background-color: var(--special);
 }
 
 /* -----------------styling for landing page--------------------  */
