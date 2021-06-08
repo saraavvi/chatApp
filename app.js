@@ -195,6 +195,7 @@ app.use((err, req, res, next) => {
     if (!err.message) {
         err.message = "something went wrong";
     }
+    console.log(err.message)
     req.flash("error", err.message)
     res.status(status).redirect('back')
 })

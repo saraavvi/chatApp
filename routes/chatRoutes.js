@@ -18,12 +18,16 @@ router.get("/", isLoggedIn, async (req, res) => {
 /**
  * a user can create a new chat room
  */
-router.post("/", isLoggedIn, async (req, res) => {
+router.post("/", isLoggedIn, wrapAsync(async (req, res, next) => {
     const { name } = req.body;
-    const newRoom = await new Room({ name: name, creator: req.user._id })
-    newRoom.save()
-    res.end("room was added")
-})
+    const newRoom = new Room({ name: name, creator: req.user._id })
+    await newRoom.save();
+    if (!newRoom) {
+        throw new Error("there is already a channel with that name", 500);
+    }
+    req.flash("success", `created ${newRoom.name}`);
+    res.end();
+}));
 
 /**
  * visit a chat room. 
@@ -59,7 +63,7 @@ router.delete("/:id", isLoggedIn, async (req, res) => {
     } else {
         await Room.findByIdAndDelete(id)
         req.flash("success", `${room.name} is now deleted`)
-        res.end("room deleted")
+        res.end()
     }
 })
 

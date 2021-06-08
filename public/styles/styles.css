@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap');
 :root {
     --light: #f9f8f7;
+    --special: #b567ed;
 }
 /* ----------------general styling ------------------*/
 html body {
@@ -70,6 +71,7 @@ ul li a:hover {
     /* color: var(--light) */
 }
 .special-link {
+    color: var(--special);
 }
 .special-link:hover {
     color: inherit;
